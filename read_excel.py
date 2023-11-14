@@ -1,9 +1,5 @@
-import json
-from werkzeug.exceptions import BadRequest
-from flask import Flask, jsonify, request
-from flask_cors import CORS
 import pandas as pd
-excel_file_path = 'database_agogo.xlsx'
+import json
 
 def generate_meal_plan_LSM(protein_goal, carbs_goal, fat_goal, nbr_days):
         excel_file_path = 'database_agogo.xlsx'
@@ -69,29 +65,9 @@ def generate_meal_plan_LSM(protein_goal, carbs_goal, fat_goal, nbr_days):
         nbr_days = int(nbr_days)
         best_combinations = combinations[:nbr_days]
         return json.dumps({"best_combinations": best_combinations}, default=lambda x: float(x) if isinstance(x, Decimal) else x)
-app = Flask(__name__)
-
-@app.route('/')
-def hello_world():
-    return 'Hello world!'
-
-
-
-@app.route('/MealPrep/generateMealPlan', methods=['POST'])
-def generate_meal_plan_endpoint():
-    data = request.get_json()
-    protein_goal = data.get('protein_goal')
-    carbs_goal = data.get('carbs_goal')
-    fat_goal = data.get('fat_goal')
-    nbr_days = data.get('nbr_days')
-
-    # Call the generate_meal_plan_LSM function with the provided data
-    meal_plan = generate_meal_plan_LSM(protein_goal, carbs_goal, fat_goal, nbr_days)
-
-    # Return the meal plan as a JSON response
-    return jsonify(meal_plan)
 
 
 
 
-app.run()
+i = generate_meal_plan_LSM(protein_goal = 20, carbs_goal = 50, fat_goal = 20, nbr_days = 2)
+print (i)
