@@ -3,6 +3,10 @@ from werkzeug.exceptions import BadRequest
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import pandas as pd
+import os
+import waitress
+
+
 excel_file_path = 'database_agogo.xlsx'
 
 def generate_meal_plan_LSM(protein_goal, carbs_goal, fat_goal, nbr_days):
@@ -94,4 +98,7 @@ def generate_meal_plan_endpoint():
 
 
 
-app.run()
+if __name__ == "__main__":
+     app.debug = False
+     port = int(os.environ.get('PORT', 33507))
+     waitress.serve(app, port=port)
