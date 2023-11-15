@@ -91,7 +91,7 @@ def generate_meal_plan_endpoint():
     nbr_days = data.get('nbr_days')
 
     # Call the generate_meal_plan_LSM function with the provided data
-    meal_plan = generate_meal_plan_LSM(protein_goal, carbs_goal, fat_goal, nbr_days)
+    meal_plan = generate_meal_plan_LSM(int(protein_goal), int(carbs_goal), int(fat_goal), int(nbr_days))
 
     # Return the meal plan as a JSON response
     return meal_plan
