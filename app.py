@@ -102,7 +102,3 @@ def generate_meal_plan_endpoint():
 if __name__ == "__main__":
          app.run(host='0.0.0.0')
 
-
-
-
-api_endpoint_url = https://agogo-app-7648993f1c5c.herokuapp.com/
