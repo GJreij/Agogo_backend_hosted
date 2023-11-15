@@ -82,7 +82,7 @@ def hello_world():
 
 
 
-@app.route('/MealPrep/generateMealPlan', methods=['POST'])
+@app.route('/MealPrep/generateMealPlan', methods=['GET'])
 def generate_meal_plan_endpoint():
     data = request.get_json()
     protein_goal = data.get('protein_goal')
