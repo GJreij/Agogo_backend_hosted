@@ -70,15 +70,15 @@ def generate_meal_plan_LSM(protein_goal, carbs_goal, fat_goal, nbr_days):
         # Sort the combinations based on LSM score in ascending order
         combinations .sort(key=lambda x: x["score"])
         nbr_days = int(nbr_days)
-        #best_combinations = combinations[:nbr_days]
-        #return json.dumps({"best_combinations": best_combinations}, default=lambda x: float(x) if isinstance(x, Decimal) else x)
-        best_combinations = combinations[0]
-        return json.dumps(best_combinations) 
+        best_combinations = combinations[:nbr_days]
+        return json.dumps({"best_combinations": best_combinations}, default=lambda x: float(x) if isinstance(x, Decimal) else x)
+        #best_combinations = combinations[0]
+        #return json.dumps(best_combinations) 
 app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
-    return 'Hello world!'
+    return 'AJOUJOUUUUUUUUUUUUU isss onlinneeeee'
 
 
 
