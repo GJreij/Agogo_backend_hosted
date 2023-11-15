@@ -1,1 +1,1 @@
-web : gunicorn Meal_Prep_API_Test:app
+web : gunicorn app:app

@@ -7,7 +7,6 @@ import os
 import waitress
 
 
-excel_file_path = 'database_agogo.xlsx'
 
 def generate_meal_plan_LSM(protein_goal, carbs_goal, fat_goal, nbr_days):
         excel_file_path = 'database_agogo.xlsx'
