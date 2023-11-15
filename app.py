@@ -5,8 +5,8 @@ from flask_cors import CORS
 import pandas as pd
 import os
 import waitress
-
-
+from decimal import Decimal
+excel_file_path = 'database_agogo.xlsx'
 
 def generate_meal_plan_LSM(protein_goal, carbs_goal, fat_goal, nbr_days):
         excel_file_path = 'database_agogo.xlsx'
@@ -98,6 +98,4 @@ def generate_meal_plan_endpoint():
 
 
 if __name__ == "__main__":
-     app.debug = False
-     port = int(os.environ.get('PORT', 33507))
-     waitress.serve(app, port=port)
+         app.run(host='0.0.0.0')
