@@ -94,7 +94,7 @@ def generate_meal_plan_endpoint():
     meal_plan = generate_meal_plan_LSM(protein_goal, carbs_goal, fat_goal, nbr_days)
 
     # Return the meal plan as a JSON response
-    return jsonify(meal_plan)
+    return meal_plan
 
 
 
