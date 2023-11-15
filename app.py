@@ -84,11 +84,19 @@ def hello_world():
 
 @app.route('/MealPrep/generateMealPlan', methods=['GET'])
 def generate_meal_plan_endpoint():
-    data = request.get_json()
-    protein_goal = data.get('protein_goal')
-    carbs_goal = data.get('carbs_goal')
-    fat_goal = data.get('fat_goal')
-    nbr_days = data.get('nbr_days')
+    protein_goal = request.headers.get('X-Protein-Goal')
+    carbs_goal = request.headers.get('X-Carbs-Goal')
+    fat_goal = request.headers.get('X-Fat-Goal')
+    nbr_days = request.headers.get('X-Nbr-Days')
+
+    # Check if any of the headers are missing
+    if None in (protein_goal, carbs_goal, fat_goal, nbr_days):
+        return jsonify({'error': 'Missing headers'}), 400
+    # data = request.get_json()
+    # protein_goal = data.get('protein_goal')
+    # carbs_goal = data.get('carbs_goal')
+    # fat_goal = data.get('fat_goal')
+    # nbr_days = data.get('nbr_days')
 
     # Call the generate_meal_plan_LSM function with the provided data
     meal_plan = generate_meal_plan_LSM(int(protein_goal), int(carbs_goal), int(fat_goal), int(nbr_days))
