@@ -78,7 +78,8 @@ def generate_meal_plan_LSM(protein_goal, carbs_goal, fat_goal, nbr_days):
                                     "breakfast_servings": breakfast_servings,
                                     "lunch_servings": lunch_servings,
                                     "dinner_servings": dinner_servings,
-                                    "total calories": total_calories
+                                    "total calories": total_calories,
+                                    "score" : score
                                     }
                                     combinations.append(combination)
    
