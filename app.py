@@ -55,15 +55,30 @@ def generate_meal_plan_LSM(protein_goal, carbs_goal, fat_goal, nbr_days):
                                     score = (4*(protein_goal - protein_meals)**2 + 
                                             (carbs_goal - carbs_meals)**2 + 
                                             (fat_goal - fat_meals)**2)
-                                    
+                                    breakfast_calories = 4 * breakfast ["carbs"] + 4 * breakfast ["protein"] + 9* breakfast ["fat"]
+                                    lunch_calories = 4 * lunch ["carbs"] + 4 * lunch ["protein"] + 9* lunch ["fat"]
+                                    dinner_calories = 4 * dinner ["carbs"] + 4 * dinner ["protein"] + 9* dinner ["fat"]
+                                    total_calories = breakfast_calories+lunch_calories+dinner_calories
                                     combination = {
                                     "breakfast": breakfast["name"],
+                                    "breakfast protein" : breakfast ["protein"],
+                                    "breakfast carbs" : breakfast["carbs"],
+                                    "breakfast fat" : breakfast ["fat"],
+                                    "breakfast calories" : breakfast_calories,
                                     "lunch": lunch["name"],
+                                    "lunch protein" : lunch ["protein"],
+                                    "lunch carbs" : lunch["carbs"],
+                                    "lunch fat" : lunch ["fat"],
+                                    "lunch calories" : lunch_calories,
                                     "dinner": dinner["name"],
+                                    "dinner protein" : dinner ["protein"],
+                                    "dinner carbs" : dinner["carbs"],
+                                    "dinner fat" : dinner ["fat"],
+                                    "dinner calories" : dinner_calories,
                                     "breakfast_servings": breakfast_servings,
                                     "lunch_servings": lunch_servings,
                                     "dinner_servings": dinner_servings,
-                                    "score": score
+                                    "total calories": total_calories
                                     }
                                     combinations.append(combination)
    
