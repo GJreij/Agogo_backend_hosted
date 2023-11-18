@@ -28,7 +28,7 @@ def hello_world():
 
 @app.get('/admin/closeConn')
 def Close_Con():
-     Db_connection.closeConnection()
+     Db_connection.closeConnection(Db_connection.getConnection())
      return "connection closed";
 
 #DIETITIAN CLASS
