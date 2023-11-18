@@ -6,6 +6,7 @@ import pandas as pd
 import os
 import waitress
 from decimal import Decimal
+import numpy as np
 excel_file_path = 'database_agogo.xlsx'
 
 def generate_meal_plan_LSM(protein_goal, carbs_goal, fat_goal, nbr_days):
