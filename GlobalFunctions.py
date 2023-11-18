@@ -1,3 +1,6 @@
+import json
+
+
 class GlobalFunctions:
 
     @staticmethod
@@ -40,3 +43,9 @@ class GlobalFunctions:
         query = query1 + " VALUES " + query2
         return query
 
+
+    @staticmethod
+    def cleanJSON(json_obj):
+        json_obj = json.dumps(json_obj)
+        json_obj = json_obj.replace(r'"{\\', '{').replace('\\', '').replace('}"','}').replace('"{', '{')
+        return json_obj

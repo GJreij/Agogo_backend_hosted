@@ -128,12 +128,21 @@ class Dietitian:
             
             # Close the cursor
             cur.close()
-            
-            return f"Dietitian added successfully with ID: {dietitian_id}"
+            response = {
+                        "status": "success",
+                        "message": "Operation completed successfully.",
+                        "dietitian_id" : dietitian_id
+                    }
+
+            return json.dumps(response)
             
         except psycopg2.Error as e:
             Db_connection.closeConnection(Db_connection.getConnection());
-            return f"Database error: {e}"
+            response = {
+                        "status": "error",
+                        "message": "DB error: " + str(e)
+                    }            
+            return json.dumps(response)
     
     
     @staticmethod
@@ -143,9 +152,17 @@ class Dietitian:
         try:
             if 'dietitian_id' in updated_data:
                 if updated_data['dietitian_id'] == '':
-                    return "dietitian_id is missing"
+                    response = {
+                        "status": "error",
+                        "message": "dietitian_id is missing"
+                    }            
+                    return json.dumps(response)
             else:
-                return "dietitian_id is missing"   
+                response = {
+                        "status": "error",
+                        "message": "dietitian_id is missing"
+                    }            
+                return json.dumps(response) 
                 
             cur = Db_connection.getConnection().cursor()
             update_query = 'UPDATE dietitian SET ' + GlobalFunctions.buildUpdateQuery(updated_data) 
@@ -158,12 +175,27 @@ class Dietitian:
             cur.close()
             
             if cur.rowcount:
-                return f"dietitian with ID: {dietitian_id} updated successfully."
+                response = {
+                        "status": "success",
+                        "message": "Operation completed successfully.",
+                        "dietitian_id" : dietitian_id
+                    }
+                return json.dumps(response)
             else:
-                return f"No dietitian found with ID: {dietitian_id}"
+                response = {
+                        "status": "success",
+                        "message": "Operation completed successfully.",
+                        "dietitian_id" : dietitian_id
+                    }
+                return json.dumps(response)
     
         except psycopg2.Error as e:
-            return f"Database error: {e}"
+            Db_connection.closeConnection(Db_connection.getConnection());
+            response = {
+                        "status": "error",
+                        "message": "DB error: " + str(e)
+                    }            
+            return json.dumps(response)
 
     @staticmethod
     def getDietitians():
@@ -183,12 +215,18 @@ class Dietitian:
                 jsonDietitiansArray.append(dietitianObject.dietitian_json())            
             cur.close()
 
-            jsonDietitiansArray = json.dumps(jsonDietitiansArray)
-            jsonDietitiansArray = jsonDietitiansArray.replace(r'"{\\', '{').replace('\\', '').replace('}"','}').replace('"{', '{')
+            jsonDietitiansArray = GlobalFunctions.cleanJSON(jsonDietitiansArray)
+            # jsonDietitiansArray = json.dumps(jsonDietitiansArray)
+            # jsonDietitiansArray = jsonDietitiansArray.replace(r'"{\\', '{').replace('\\', '').replace('}"','}').replace('"{', '{')
             return jsonDietitiansArray;
 
         except psycopg2.Error as e:
-            return f"Database error: {e}"
+            Db_connection.closeConnection(Db_connection.getConnection());
+            response = {
+                        "status": "error",
+                        "message": "DB error: " + str(e)
+                    }            
+            return json.dumps(response)
 
 
     @staticmethod
