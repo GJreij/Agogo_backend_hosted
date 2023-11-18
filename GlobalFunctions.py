@@ -1,3 +1,4 @@
+import datetime
 import json
 
 
@@ -49,3 +50,27 @@ class GlobalFunctions:
         json_obj = json.dumps(json_obj)
         json_obj = json_obj.replace(r'"{\\', '{').replace('\\', '').replace('}"','}').replace('"{', '{')
         return json_obj
+    
+    @staticmethod
+    def convert_date_to_yyyy_mm_dd(date_str):
+        # Define possible date formats
+        date_formats = [
+            "%d-%m-%Y",  # DD-MM-YYYY
+            "%m/%d/%Y",  # MM/DD/YYYY
+            "%Y/%m/%d",  # YYYY/MM/DD
+            "%b %d, %Y", # Nov 18, 2023 (Month abbreviation, day, year)
+            # ... add other formats as needed
+        ]
+
+        for format in date_formats:
+            try:
+                # Try to parse the date using the current format
+                parsed_date = datetime.strptime(date_str, format)
+                # If parsing is successful, return the date in YYYY-MM-DD format
+                return parsed_date.strftime("%Y-%m-%d")
+            except ValueError:
+                # If parsing fails, try the next format
+                continue
+            
+        # If none of the formats match, return an error message or handle as needed
+        return "Invalid date format"
