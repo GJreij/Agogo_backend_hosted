@@ -23,7 +23,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
-    return 'Hello world!'
+    return 'AJOUJOUUUUUUU IS ONLINEEE!'
     
 #DIETITIAN CLASS
 @app.get('/dietitian/login')
