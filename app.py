@@ -7,9 +7,13 @@ import os
 import waitress
 from decimal import Decimal
 import numpy as np
+from Db_connection import Db_connection
+
+
 excel_file_path = 'database_agogo.xlsx'
 
 def generate_meal_plan_LSM(protein_goal, carbs_goal, fat_goal, nbr_days):
+        cur = Db_connection.getConnection().cursor()
         excel_file_path = 'database_agogo.xlsx'
 
         # Read the data from the 'recipee' table in the Excel file
