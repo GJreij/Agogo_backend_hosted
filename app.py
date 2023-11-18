@@ -430,22 +430,22 @@ def getRecipeeByID():
 
 # ########################## Swagger Documentation
 
-# # Config Swagger UI
-# SWAGGER_URL = '/api/docs'  # URL for exposing Swagger UI
-# API_URL = '/static/swagger.json'  # Our API url
+# Config Swagger UI
+SWAGGER_URL = '/api/docs'  # URL for exposing Swagger UI
+API_URL = '/static/swagger.json'  # Our API url
 
-# # Call factory function to create our blueprint
-# swaggerui_blueprint = get_swaggerui_blueprint(
-#     SWAGGER_URL,
-#     API_URL,
-#     config={  # Swagger UI config overrides
-#         'app_name': "AGOGO"
-#     }
-# )
+# Call factory function to create our blueprint
+swaggerui_blueprint = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={  # Swagger UI config overrides
+        'app_name': "AGOGO"
+    }
+)
 
-# # Register blueprint at URL
-# CORS(app)
-# app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
+# Register blueprint at URL
+CORS(app)
+app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 if __name__ == "__main__":
          app.run(host='0.0.0.0')
 
