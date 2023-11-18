@@ -132,6 +132,7 @@ class Dietitian:
             return f"Dietitian added successfully with ID: {dietitian_id}"
             
         except psycopg2.Error as e:
+            Db_connection.closeConnection(Db_connection.getConnection());
             return f"Database error: {e}"
     
     
