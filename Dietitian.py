@@ -181,6 +181,9 @@ class Dietitian:
                 dietitianObject = Dietitian(dietitian[0],dietitian[1],dietitian[2],dietitian[3],dietitian[4],dietitian[5])
                 jsonDietitiansArray.append(dietitianObject.dietitian_json())            
             cur.close()
+
+            jsonDietitiansArray = json.dumps(jsonDietitiansArray)
+            jsonDietitiansArray = jsonDietitiansArray.replace(r'"{\\', '{').replace('\\', '').replace('}"','}').replace('"{', '{')
             return jsonDietitiansArray;
 
         except psycopg2.Error as e:
