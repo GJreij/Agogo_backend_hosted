@@ -25,6 +25,7 @@ class Dietitian:
     def dietitian_json(self):
         print('json dietitian______')
         jsonDietitian = json.dumps(vars(self));
+        jsonDietitian = jsonDietitian.replace(r'"{\\', '{').replace('\\', '').replace('}"','}')
         print(jsonDietitian)
         return jsonDietitian;
 
