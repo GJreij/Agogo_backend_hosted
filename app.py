@@ -24,7 +24,13 @@ app = Flask(__name__)
 @app.route('/')
 def hello_world():
     return 'AJOUJOUUUUUUU IS ONLINEEE!'
-    
+
+
+@app.get('/admin/closeConn')
+def Close_Con():
+     Db_connection.closeConnection()
+     return "connection closed";
+
 #DIETITIAN CLASS
 @app.get('/dietitian/login')
 def getDietitian():
