@@ -1,0 +1,89 @@
+
+// curl --location 'http://127.0.0.1:5000/dietitian/createPatient' \
+// --header 'Content-Type: application/json' \
+// --data-raw '{
+//  "first_name" : "Nadim",
+//  "last_name" : "Abou Chrouch",
+//  "gender" : "Male",
+//  "date_of_birth" : "01/04/2000",
+//  "phone" : "063923912",
+//  "email" : "nadim@gmail.com",
+//  "address" : "23 rue chauvelot",
+//  "dietitian_id" : "1",
+//  "pwd" : "nadim"
+//  }'
+
+
+// curl --location 'http://127.0.0.1:5000/patient/addAnthropometry' \
+// --header 'Content-Type: application/json' \
+// --data '{
+// "patient_ID" : 2,
+// "measurement_date" : "", 
+// "weight" : 188,
+// "height" : 453,
+// "waist_circumference": 453,
+// "hip_circumference": 453, 
+// "abdominal_skinfold": 453, 
+// "chest_skinfold": 453, 
+// "front_thigh_skinfold": 453, 
+// "midaxillary_skinfold": 453, 
+// "subscapular_skinfold": 453,
+// "suprailiac_skinfold": 453,
+// "triceps_skinfold": 453
+// }'
+
+
+
+// curl --location 'http://127.0.0.1:5000/patient/addBodyComp' \
+// --header 'Content-Type: application/json' \
+// --data '{
+// "patient_ID" : 2,
+// "measurement_date" : "", 
+// "body_fat_percentage": 56, 
+// "fat_mass" : 63, 
+// "muscle_mass":23,
+// "muscle_mass_percentage":43,
+// "body_type":"3rf2d"
+// }'
+
+
+
+// curl --location 'http://127.0.0.1:5000/patient/addHealthHistory' \
+// --header 'Content-Type: application/json' \
+// --data '{
+// "patient_ID" : 2,
+// "measurement_date" : "", 
+//  "medical_diseases":"", 
+//  "medication":"hgfhcjhv",
+//  "family_history":"ktjhvb",
+//  "personal_history":"",
+//  "bowel_movement":"ligkj,h",
+//  "allergies_intolerences":"",
+//  "diastolic_bp":23,
+//  "systolic_bp":54,
+//  "hdl_cholesterol":11,
+//  "ldl_cholesterol":11,
+//  "total_cholesterol":543,
+//  "triglycerides":31
+// }'
+
+
+
+// curl --location 'http://127.0.0.1:5000/patient/addLifeStyle' \
+// --header 'Content-Type: application/json' \
+// --data '{
+// "patient_ID" : 2,
+// "measurement_date" : "", 
+// "physical_activity":"efgsdf",
+// "sleep_quality":"3rwf",
+// "smoker":"ref",
+// "alcohol_consumption":"REFDF",
+// "usual_wake_up_time":"",
+// "usual_bed_time":"",
+// "favorite_food":"",
+// "disliked_food":"#RWFE",
+// "water_intake":"4tgrf",
+// "eating_behaviour":"egfq"
+// }'
+
+

@@ -1,0 +1,67 @@
+    [
+        {
+            "breakfast": {
+                "diet_id": "1", 
+                "recipee_id": "36", 
+                "meal_type": "Breakfast", 
+                "patient_id": "2",
+                "diet_start_date": "10/12/2023",
+                "combinationnbr": "1",
+                "date": "", 
+                "servings": "1"
+                },
+            "lunch": {
+                "diet_id": "1", 
+                "recipee_id": "15", 
+                "meal_type": "Lunch", 
+                "patient_id": "2",
+                "diet_start_date": "10/12/2023",
+                "combinationnbr": "1",
+                "date": "", 
+                "servings": "2"
+                },
+            "dinner": {
+                "diet_id": "1", 
+                "recipee_id": "57", 
+                "meal_type": "Dinner", 
+                "patient_id": "2",
+                "diet_start_date": "10/12/2023",
+                "combinationnbr": "1",
+                "date": "", 
+                "servings": "1"
+               }
+        },
+        {
+            "breakfast": {
+                "diet_id": "1", 
+                "recipee_id": "36", 
+                "meal_type": "Breakfast", 
+                "patient_id": "2",
+                "diet_start_date": "10/12/2023",
+                "combinationnbr": "2",
+                "date": "", 
+                "servings": "1"
+            },
+            "lunch": {
+                "diet_id": "1", 
+                "recipee_id": "21", 
+                "meal_type": "Lunch", 
+                "patient_id": "2",
+                "diet_start_date": "10/12/2023",
+                "combinationnbr": "2",
+                "date": "", 
+                "servings": "2"
+            },
+            "dinner": {
+                "diet_id": "1", 
+                "recipee_id": "57", 
+                "meal_type": "Dinner", 
+                "patient_id": "2",
+                "diet_start_date": "10/12/2023",
+                "combinationnbr": "2",
+                "date": "", 
+                "servings": "3"
+            },
+            "score": 2849.0
+        }
+    ]

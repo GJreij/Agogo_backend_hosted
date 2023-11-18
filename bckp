@@ -1,0 +1,79 @@
+
+    # @staticmethod
+    # def buildUpdateQuery22(patient_data):
+    #     # query = 'UPDATE public.patient_static_info SET '
+    #     # comma = 'no'
+    #     # if 'first_name' in patient_data:
+    #     #     if patient_data['first_name'] != '':
+    #     #         if comma =='no':
+    #                 query = query + "first_name= '"+ patient_data['first_name'] + "' "
+    #                 comma = 'yes'
+    #             else:
+    #                 query = query + ", first_name='"+ patient_data['first_name'] + "' "
+    #     if 'last_name' in patient_data:
+    #         if patient_data['last_name'] != '':
+    #             if comma =='no':
+    #                 query = query + "last_name='"+ patient_data['last_name'] + "' "
+    #                 comma = 'yes'
+    #             else:
+    #                 query = query + ", last_name='"+ patient_data['last_name'] + "' "
+
+    #     if 'gender' in patient_data:
+    #         if patient_data['gender'] != '':
+    #             if comma =='no':
+    #                 query = query + "gender='"+ patient_data['gender'] + "' "
+    #                 comma = 'yes'
+    #             else:
+    #                 query = query + ", gender='"+ patient_data['gender'] + "' "
+
+    #     if 'date_of_birth' in patient_data:
+    #         if patient_data['date_of_birth'] != '':
+    #             if comma =='no':
+    #                 query = query + "date_of_birth='"+ patient_data['date_of_birth'] + "' "
+    #                 comma = 'yes'
+    #             else:
+    #                 query = query + ", date_of_birth='"+ patient_data['date_of_birth'] + "' "
+
+    #     if 'phone' in patient_data:
+    #         if patient_data['phone'] != '':
+    #             if comma =='no':
+    #                 query = query + "phone='"+ str(patient_data['phone']) + "' "
+    #                 comma = 'yes'
+    #             else:
+    #                 query = query + ", phone='"+ str(patient_data['phone']) + "' "
+        
+    #     if 'email' in patient_data:
+    #         if patient_data['email'] != '':
+    #             if comma =='no':
+    #                 query = query + "email='"+ patient_data['email'] + "' "
+    #                 comma = 'yes'
+    #             else:
+    #                 query = query + ", email='"+ patient_data['email'] + "' "
+            
+    #     if 'address' in patient_data:
+    #         if patient_data['address'] != '':
+    #             if comma =='no':
+    #                 query = query + "address='"+ patient_data['address'] + "' "
+    #                 comma = 'yes'
+    #             else:
+    #                 query = query + ", address='"+ patient_data['address'] + "' "
+                    
+    #     if 'dietitian_id' in patient_data:          
+    #         if patient_data['dietitian_id'] != '':
+    #             if comma =='no':
+    #                 query = query + "dietitian_id='"+ str(patient_data['dietitian_id']) + "' "
+    #                 comma = 'yes'
+    #             else:
+    #                 query = query + ", dietitian_id='"+ str(patient_data['dietitian_id']) + "' "
+                
+    #     if 'pwd' in patient_data:          
+    #         if patient_data['pwd'] != '':
+    #             if comma =='no':
+    #                 query = query + "pwd= '"+ patient_data['pwd'] + "' "
+    #                 comma = 'yes'
+    #             else:
+    #                 query = query + ", pwd='"+ patient_data['pwd'] + "' "
+        
+    #     query = query + "WHERE patient_id = '" + str(patient_data['patient_ID']) + "'"
+    #     return query
+    

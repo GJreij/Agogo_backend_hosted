@@ -446,5 +446,7 @@ swaggerui_blueprint = get_swaggerui_blueprint(
 # Register blueprint at URL
 CORS(app)
 app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
-app.run(host='0.0.0.0')
+        
 
+
+app.run()

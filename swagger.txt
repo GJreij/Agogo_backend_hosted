@@ -1,0 +1,30 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Your App API",
+    "version": "1.0"
+  },
+  "paths": {
+    "/dietitian/login": {
+      "get": {
+        "summary": "Logs in a dietitian",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/dietitian/patients": {
+      "get": {
+        "summary": "Fetch patients for a dietitian",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+    // Add more paths here
+  }
+}

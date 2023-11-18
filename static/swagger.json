@@ -1,0 +1,2139 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "AGOGO API",
+    "description": "API for AGOGO's APP."
+  },
+  "host": "localhost:5000",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/dietitian/login": {
+      "get": {
+        "tags": ["Dietitian API"],
+        "summary": "Login for Dietitian",
+        "description": "Authenticate and retrieve details for a dietitian based on email and password.",
+        "parameters": [
+          {
+            "name": "dietitian_email",
+            "in": "body",
+            "required": true,
+            "description": "Email of the dietitian.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "dietitian_email": {
+                  "type": "string"
+                },
+                "dietitian_pwd": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Dietitian"
+            }
+          },
+          "400": {
+            "description": "Email or password is missing or incorrect, or other bad request."
+          }
+        }
+      }
+    },
+    "/dietitian/getDietitians": {
+      "get": {
+        "tags": ["Dietitian API"],
+        "summary": "Get List of system Dietitians",
+        "description": "Get List of system Dietitians.",
+        "parameters": [
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "Type":"array",
+              "items":{
+              "$ref": "#/definitions/Dietitian"
+              }
+            }
+          },
+          "400": {
+            "description": "Error."
+          }
+        }
+      }
+    },
+    "/dietitian/patients": {
+      "get": {
+        "tags": ["Dietitian API"],
+        "summary": "Fetch dietitian's patients",
+        "description": "Fetch all patients of a specific dietitian",
+        "parameters": [
+          {
+            "name": "dietitianDetails",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "dietitian_ID": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+             "schema": {
+                "Type": "array",
+                "items":{ 
+                "$ref": "#/definitions/Patient"
+                }
+          }
+        }
+      }
+     }
+    },
+    "/dietitian/createPatient": {
+      "post": {
+        "tags": ["Dietitian API"],
+        "summary": "Create a patient",
+        "description": "Create a new patient for a specific dietitian",
+        "parameters": [
+          {
+            "name": "patientDetails",
+            "in": "body",
+            "required": true,
+            "schema": {
+               "$ref": "#/definitions/CreatePatient"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+             "schema": {
+               "$ref": "#/definitions/Patient"
+             }
+          }
+        }
+      }
+    },
+    "/dietitian/deactivatePatient": {
+      "post": {
+        "tags": ["Dietitian API"],
+        "summary": "Deactivate a patient",
+        "description": "Deactivate a specific patient",
+        "parameters": [
+          {
+            "name": "patientDetails",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "patient_ID": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+                "patient_ID": {
+                  "type": "String"
+                }
+              }
+          }
+        }
+      }
+    },
+    "/dietitian/activatePatient": {
+      "post": {
+        "tags": ["Dietitian API"],
+        "summary": "Activate a patient",
+        "description": "Activate a specific patient",
+        "parameters": [
+          {
+            "name": "patientDetails",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "patient_ID": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+             "schema": {
+                 "patient_ID": {
+                   "type": "String"
+                 }
+               }
+          }
+        }
+      }
+    },
+    "/dietitian/addDietitian": {
+      "post": {
+        "tags": ["Dietitian API"],
+        "summary": "Create a Dietitian",
+        "description": "Create a new Dietitian",
+        "parameters": [
+          {
+            "name": "patientDetails",
+            "in": "body",
+            "required": true,
+            "schema": {
+               "$ref": "#/definitions/DietitianCreation"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dietitian added successfully with ID: {dietitian_id}"
+          }
+        }
+      }
+    },
+    "/dietitian/updateDietitian": {
+      "put": {
+        "tags": ["Dietitian API"],
+        "summary": "Update a Dietitian",
+        "description": "Update a Dietitian",
+        "parameters": [
+          {
+            "name": "patientDetails",
+            "in": "body",
+            "required": true,
+            "schema": {
+               "$ref": "#/definitions/DietitianUPD"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "dietitian with ID: {dietitian_id} updated successfully."
+          }
+        }
+      }
+    },
+    "/dietitian/deleteDietitian": {
+      "delete": {
+        "tags": ["Dietitian API"],
+        "summary": "Update a Dietitian",
+        "description": "Update a Dietitian",
+        "parameters": [
+          {
+            "name": "Dietitian Id",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "dietitian_id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+          
+        ],
+        "responses": {
+          "200": {
+            "description": "dietitian with ID: {dietitian_id} deleted successfully."
+          }
+        }
+      }
+    },
+    "/MealPrep/generateMealPlan": {
+      "get": {
+        "tags": ["Meal Plan Generation API"],
+        "summary": "Generate meal plan using LSM",
+        "description": "Generates a meal plan based on protein, carbs, and fat goals using Least Squares Method (LSM).",
+        "parameters": [
+          {
+            "name": "mealPlanDetails",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "dietitian_ID": {
+                  "type": "string"
+                },
+                "protein_goal": {
+                  "type": "number"
+                },
+                "carbs_goal": {
+                  "type": "number"
+                },
+                "fat_goal": {
+                  "type": "number"
+                },
+                "nbr_days": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/GenMealPrep"
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/MealPrep/generateMealPlanFixedLunch": {
+      "get": {
+        "tags": ["Meal Plan Generation API"],
+        "summary": "Generate meal plan with fixed lunch",
+        "description": "Generates a meal plan with a fixed lunch ID.",
+        "parameters": [
+          {
+            "name": "mealPlanFixedLunchDetails",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "dietitian_ID": {
+                  "type": "string"
+                },
+                "protein_goal": {
+                  "type": "number"
+                },
+                "carbs_goal": {
+                  "type": "number"
+                },
+                "fat_goal": {
+                  "type": "number"
+                },
+                "nbr_days": {
+                  "type": "integer"
+                },
+                "fixed_lunch_id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/GenMealPrep"
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/MealPrep/generateShoppingList": {
+      "get": {
+        "tags": ["Meal Plan Generation API"],
+        "summary": "Generate shopping list",
+        "description": "Generates a shopping list based on the recipe ID.",
+        "parameters": [
+          {
+            "name": "shoppingListDetails",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "dietitian_ID": {
+                  "type": "string"
+                },
+                "recipee_id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "type": "array",
+              "items":{
+                "$ref": "#/definitions/shoppingListItem"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    }, 
+    "/MealPrep/insertMealPlanItem": {
+      "post": {
+        "tags": ["Meal Plan Item API"],
+        "summary": "Adds a Meal Plan Item to the DB",
+        "description": "Adds a Meal Plan Item to the DB",
+        "parameters": [
+          {
+            "name": "mealPlanDetails",
+            "in": "body",
+            "required": true,
+            "schema": {
+                "$ref": "#/definitions/MealPrepItem"
+              }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "meal prep item added successfully"
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    }, 
+    "/MealPrep/insertBulkMPItems": {
+      "post": {
+        "tags": ["Meal Plan Item API"],
+        "summary": "Adds several Meal Plan Items to the DB in one call",
+        "description": "Adds several Meal Plan Items to the DB in one call",
+        "parameters": [
+          {
+            "name": "insert_bulk_MP_Items",
+            "in": "body",
+            "required": true,
+            "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/MealPrepItem"
+                }
+              }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "meal prep items added successfully"
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    }, 
+    "/MealPrep/getCombination": {
+      "get": {
+        "tags": ["Meal Plan Item API"],
+        "summary": "gets a specific saved combination based on the patient, diet, and combination ID",
+        "description": "gets a specific saved combination based on the patient, diet, and combination ID",
+        "parameters": [
+          {
+            "name": "mealPlanDetails",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "diet_id": {
+                  "type": "integer",
+                  "format": "int64"
+                },
+                "patient_id": {
+                  "type": "integer",
+                  "format": "int64"
+                },
+                "combination_id": {
+                  "type": "integer",
+                  "format": "int64"
+                }}
+              }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Combination"
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/diet/getDietCombinations": {
+      "get": {
+        "tags": ["Meal Plan Item API"],
+        "summary": "gets a all saved  combinations based on the patient and diet",
+        "description": "gets a all saved  combinations based on the patient and diet",
+        "parameters": [
+          {
+            "name": "mealPlanDetails",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "diet_id": {
+                  "type": "integer",
+                  "format": "int64"
+                },
+                "patient_id": {
+                  "type": "integer",
+                  "format": "int64"
+                }}
+              }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+                "type": "array",
+                "items": {
+                "$ref": "#/definitions/Combination"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/Recipee/getRecipee": {
+      "get": {
+        "tags": ["Recipee API"],
+        "summary": "Fetch Recipee details",
+        "description": "Fetch details of a Recipee by its ID.",
+        "parameters": [
+          {
+            "name": "recipee_id",
+            "in": "body",
+            "required": true,
+            "description": "ID of the recipee to be fetched.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ingredient_id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Recipee"
+            }
+          },
+          "400": {
+            "description": "recipee ID is required or other bad request."
+          },
+          "404": {
+            "description": "recipee not found."
+          }
+        }
+      }
+    },
+   "/Ingredient/details": {
+      "get": {
+        "tags": ["Ingredient API"],
+        "summary": "Fetch ingredient details",
+        "description": "Fetch details of a specific ingredient by its ID.",
+        "parameters": [
+          {
+            "name": "ingredient_id",
+            "in": "body",
+            "required": true,
+            "description": "ID of the ingredient to be fetched.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ingredient_id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Ingredient"
+            }
+          },
+          "400": {
+            "description": "Ingredient ID is required or other bad request."
+          },
+          "404": {
+            "description": "Ingredient not found."
+          }
+        }
+      }
+    },
+    "/Ingredient/addIngredient": {
+      "post": {
+        "tags": ["Ingredient API"],
+        "summary": "Add a new ingredient",
+        "description": "Add a new ingredient to the database.",
+        "parameters": [
+          {
+            "name": "ingredient_data",
+            "in": "body",
+            "required": true,
+            "description": "Data of the ingredient to be added.",
+            "schema": {
+              "$ref": "#/definitions/CreateIngredient"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ingredient added successfully."
+          },
+          "400": {
+            "description": "Bad request."
+          }
+        }
+      }
+    },
+    "/Ingredient/updateIngredient": {
+      "put": {
+        "tags": ["Ingredient API"],
+        "summary": "Update an ingredient",
+        "description": "Update details of a specific ingredient by its ID.",
+        "parameters": [
+          {
+            "name": "ingredient_data",
+            "in": "body",
+            "required": true,
+            "description": "Updated data of the ingredient.",
+            "schema": {
+              "$ref": "#/definitions/Ingredient"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ingredient updated successfully."
+          },
+          "400": {
+            "description": "Ingredient ID is required or other bad request."
+          },
+          "404": {
+            "description": "Ingredient not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    }, 
+   "/Diet/createDiet": {
+      "post": {
+        "tags": ["Diet API"],
+        "summary": "Create a new diet",
+        "description": "Add a new diet record for a patient.",
+        "parameters": [
+          {
+            "name": "diet_data",
+            "in": "body",
+            "required": true,
+            "description": "Data for the diet to be created.",
+            "schema": {
+              "$ref": "#/definitions/CreateDiet"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Diet added successfully with ID: {diet_id}"
+          },
+          "400": {
+            "description": "Bad request."
+          }
+        }
+      }
+    },
+    "/Diet/udpateDiet": {
+      "put": {
+        "tags": ["Diet API"],
+        "summary": "Update an existing diet",
+        "description": "Update a diet record for a patient using the diet ID.",
+        "parameters": [
+          {
+            "name": "diet_data",
+            "in": "body",
+            "required": true,
+            "description": "Updated data for the diet.",
+            "schema": {
+              "$ref": "#/definitions/Diet"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Diet updated successfully with ID: {diet_id}."
+          },
+          "400": {
+            "description": "Bad request or Diet ID is required."
+          },
+          "404": {
+            "description": "Diet not found."
+          }
+        }
+      }
+    },
+    "/Diet/deleteDiet": {
+      "delete": {
+        "tags": ["Diet API"],
+        "summary": "Delete a diet",
+        "description": "Remove a diet record using the diet ID.",
+        "parameters": [
+          {
+            "name": "diet_id",
+            "in": "body",
+            "required": true,
+            "description": "ID of the diet to be deleted.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "diet_id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Diet deleted successfully with ID: {diet_id}."
+          },
+          "400": {
+            "description": "Diet ID is required or bad request."
+          },
+          "404": {
+            "description": "Diet not found."
+          }
+        }
+      }
+    },
+    "/Diet/getDietHistory": {
+      "get": {
+        "tags": ["Diet API"],
+        "summary": "Fetch diet history for a patient",
+        "description": "Retrieve all diet records for a given patient ID.",
+        "parameters": [
+          {
+            "name": "patient_id",
+            "in": "body",
+            "required": true,
+            "description": "ID of the patient.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "patient_id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Diet"
+              }
+            }
+          },
+          "400": {
+            "description": "Patient ID is required or bad request."
+          },
+          "404": {
+            "description": "No diets found for the given patient ID."
+          }
+        }
+      }
+    },
+    "/Diet/getLastDiet": {
+      "get": {
+        "tags": ["Diet API"],
+        "summary": "Fetch the last diet for a patient",
+        "description": "Retrieve the most recent diet record for a given patient ID.",
+        "parameters": [
+          {
+            "name": "patient_id",
+            "in": "body",
+            "required": true,
+            "description": "ID of the patient.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "patient_id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Diet"
+            }
+          },
+          "400": {
+            "description": "Patient ID is required or bad request."
+          },
+          "404": {
+            "description": "No diets found for the given patient ID."
+          }
+        }
+      }
+    },
+    "/patient/LastLifeStyle": {
+      "get": {
+        "tags": ["LifeStyle API"],
+        "summary": "Fetch the latest lifestyle for a patient",
+        "description": "Retrieve the most recent lifestyle record for a given patient ID.",
+        "parameters": [
+          {
+            "name": "patient_ID",
+            "in": "body",
+            "required": true,
+            "description": "ID of the patient.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "patient_ID": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/LifeStyle"
+            }
+          },
+          "400": {
+            "description": "Patient ID is required or bad request."
+          }
+        }
+      }
+    },
+    "/patient/LifeStyleHistory": {
+      "get": {
+        "tags": ["LifeStyle API"],
+        "summary": "Fetch lifestyle history for a patient",
+        "description": "Retrieve all lifestyle records for a given patient ID.",
+        "parameters": [
+          {
+            "name": "patient_ID",
+            "in": "body",
+            "required": true,
+            "description": "ID of the patient.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "patient_ID": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/LifeStyle"
+              }
+            }
+          },
+          "400": {
+            "description": "Patient ID is required or bad request."
+          }
+        }
+      }
+    },
+    "/patient/addLifeStyle": {
+      "post": {
+        "tags": ["LifeStyle API"],
+        "summary": "Add a new lifestyle record for a patient",
+        "description": "Add a new lifestyle record for a given patient ID.",
+        "parameters": [
+          {
+            "name": "lifestyle_data",
+            "in": "body",
+            "required": true,
+            "description": "Data for the new lifestyle record.",
+            "schema": {
+              "$ref": "#/definitions/LifeStyle"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "LifeStyle log added successfully."
+          },
+          "400": {
+            "description": "Bad request or Patient ID is missing."
+          }
+        }
+      }
+    },
+    "/patient/LastBodyComp": {
+      "get": {
+        "tags": ["Body Composition API"],
+        "summary": "Fetch the latest body composition for a patient",
+        "description": "Retrieve the most recent body composition record for a given patient ID.",
+        "parameters": [
+          {
+            "name": "patient_ID",
+            "in": "body",
+            "required": true,
+            "description": "ID of the patient.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "patient_ID": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/BodyComp"
+            }
+          },
+          "400": {
+            "description": "Patient ID is required or bad request."
+          }
+        }
+      }
+    },
+    "/patient/BodyCompHistory": {
+      "get": {
+        "tags": ["Body Composition API"],
+        "summary": "Fetch body composition history for a patient",
+        "description": "Retrieve all body composition records for a given patient ID.",
+        "parameters": [
+          {
+            "name": "patient_ID",
+            "in": "body",
+            "required": true,
+            "description": "ID of the patient.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "patient_ID": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/BodyComp"
+              }
+            }
+          },
+          "400": {
+            "description": "Patient ID is required or bad request."
+          }
+        }
+      }
+    },
+    "/patient/addBodyComp": {
+      "post": {
+        "tags": ["Body Composition API"],
+        "summary": "Add a new body composition record for a patient",
+        "description": "Add a new body composition record for a given patient ID.",
+        "parameters": [
+          {
+            "name": "bodycomp_data",
+            "in": "body",
+            "required": true,
+            "description": "Data for the new body composition record.",
+            "schema": {
+              "$ref": "#/definitions/BodyComp"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Body composition log added successfully."
+          },
+          "400": {
+            "description": "Bad request or Patient ID is missing."
+          }
+        }
+      }
+    },
+    "/patient/LastAnthropometry": {
+      "get": {
+        "tags": ["Anthropometry API"],
+        "summary": "Fetch the latest anthropometry for a patient",
+        "description": "Retrieve the most recent anthropometry record for a given patient ID.",
+        "parameters": [
+          {
+            "name": "patient_ID",
+            "in": "body",
+            "required": true,
+            "description": "ID of the patient.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "patient_ID": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Anthropometry"
+            }
+          },
+          "400": {
+            "description": "Patient ID is required or bad request."
+          }
+        }
+      }
+    },
+    "/patient/AnthropometryHistory": {
+      "get": {
+        "tags": ["Anthropometry API"],
+        "summary": "Fetch anthropometry history for a patient",
+        "description": "Retrieve all anthropometry records for a given patient ID.",
+        "parameters": [
+          {
+            "name": "patient_ID",
+            "in": "body",
+            "required": true,
+            "description": "ID of the patient.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "patient_ID": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Anthropometry"
+              }
+            }
+          },
+          "400": {
+            "description": "Patient ID is required or bad request."
+          }
+        }
+      }
+    },
+    "/patient/addAnthropometry": {
+      "post": {
+        "tags": ["Anthropometry API"],
+        "summary": "Add a new anthropometry record for a patient",
+        "description": "Add a new anthropometry record for a given patient ID.",
+        "parameters": [
+          {
+            "name": "anthropometry_data",
+            "in": "body",
+            "required": true,
+            "description": "Data for the new anthropometry record.",
+            "schema": {
+              "$ref": "#/definitions/Anthropometry"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Anthropometry log added successfully."
+          },
+          "400": {
+            "description": "Bad request or Patient ID is missing."
+          }
+        }
+      }
+    },
+    "/patient/LastHealthHistory": {
+      "get": {
+        "tags": ["Health History API"],
+        "summary": "Fetch the latest Health History for a patient",
+        "description": "Retrieve the most recent health history record for a given patient ID.",
+        "parameters": [
+          {
+            "name": "patient_ID",
+            "in": "body",
+            "required": true,
+            "description": "ID of the patient.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "patient_ID": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/HealthHist"
+            }
+          },
+          "400": {
+            "description": "Patient ID is required or bad request."
+          }
+        }
+      }
+    },
+    "/patient/allHealthHistory": {
+      "get": {
+        "tags": ["Health History API"],
+        "summary": "Fetch health history for a patient",
+        "description": "Retrieve all health history records for a given patient ID.",
+        "parameters": [
+          {
+            "name": "patient_ID",
+            "in": "body",
+            "required": true,
+            "description": "ID of the patient.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "patient_ID": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/HealthHist"
+              }
+            }
+          },
+          "400": {
+            "description": "Patient ID is required or bad request."
+          }
+        }
+      }
+    },
+    "/patient/addHealthHistory": {
+      "post": {
+        "tags": ["Health History API"],
+        "summary": "Add a new health history record for a patient",
+        "description": "Add a new health history record for a given patient ID.",
+        "parameters": [
+          {
+            "name": "health_history_data",
+            "in": "body",
+            "required": true,
+            "description": "Data for the new health history record.",
+            "schema": {
+              "$ref": "#/definitions/HealthHist"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Health history log added successfully."
+          },
+          "400": {
+            "description": "Bad request or Patient ID is missing."
+          }
+        }
+      }
+    },
+    "/patient/login": {
+      "get": {
+        "tags": ["Patient Static API"],
+        "summary": "Authenticate and fetch patient data",
+        "parameters": [{
+          "in": "body",
+          "name": "body",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "patient_email": {
+                "type": "string",
+                "description": "Email address of the patient."
+              },
+              "patient_pwd": {
+                "type": "string",
+                "description": "Password for the patient's account."
+              }
+            }
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Patient data retrieved successfully.",
+            "schema": {
+              "$ref": "#/definitions/Patient"
+            }
+          },
+          "400": {
+            "description": "Something went wrong, please contact the system provider."
+          }
+        }
+      }
+    },
+    "/patient/staticInfo": {
+      "get": {
+        "tags": ["Patient Static API"],
+        "summary": "Fetch static information of a patient",
+        "parameters": [{
+          "in": "body",
+          "name": "body",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "patient_ID": {
+                "type": "string",
+                "description": "ID of the patient."
+              }
+            }
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Patient static information retrieved successfully.",
+            "schema": {
+              "$ref": "#/definitions/Patient"
+            }
+          },
+          "400": {
+            "description": "Something went wrong, please contact the system provider."
+          }
+        }
+      }
+    },
+    "/patient/allInfo": {
+      "get": {
+        "tags": ["Patient Static API"],
+        "summary": "Fetch all information of a patient",
+        "parameters": [{
+          "in": "body",
+          "name": "body",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "patient_ID": {
+                "type": "string",
+                "description": "ID of the patient."
+              }
+            }
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "All patient information retrieved successfully.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "p_stat_info": {
+                  "$ref": "#/definitions/Patient"
+                },
+                "p_Anthropometry": {
+                  "$ref": "#/definitions/Anthropometry"
+                },
+                "p_BodyComp": {
+                  "$ref": "#/definitions/BodyComp"
+                },
+                "p_HealthHist": {
+                  "$ref": "#/definitions/HealthHist"
+                },
+                "p_LifeStyle": {
+                  "$ref": "#/definitions/LifeStyle"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Something went wrong, please contact the system provider."
+          }
+        }
+      }
+    },
+    "/patient/deletePatient": {
+      "delete": {
+        "tags": ["Patient Static API"],
+        "summary": "Delete a patient account",
+        "parameters": [{
+          "in": "body",
+          "name": "body",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "patient_ID": {
+                "type": "string",
+                "description": "ID of the patient."
+              }
+            }
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Patient account deleted successfully."
+          }
+        }
+      }
+    },
+    "/patient/updateStaticInfo": {
+      "put": {
+        "tags": ["Patient Static API"],
+        "summary": "Update static information of a patient",
+        "parameters": [{
+          "in": "body",
+          "name": "body",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "patient_ID": {
+                "type": "string",
+                "description": "ID of the patient."
+              },
+              "first_name": {
+                "type": "string",
+                "description": "First name of the patient."
+              },
+              "last_name": {
+                "type": "string",
+                "description": "Last name of the patient."
+              },
+              "gender": {
+                "type": "string",
+                "description": "Gender of the patient."
+              },
+              "date_of_birth": {
+                "type": "string",
+                "format": "date",
+                "description": "Date of birth of the patient."
+              },
+              "phone": {
+                "type": "string",
+                "description": "Phone number of the patient."
+              },
+              "email": {
+                "type": "string",
+                "description": "Email address of the patient."
+              },
+              "address": {
+                "type": "string",
+                "description": "Address of the patient."
+              },
+              "dietitian_id": {
+                "type": "string",
+                "description": "ID of the dietitian associated with the patient."
+              },
+              "status": {
+                "type": "string",
+                "description": "Status of the patient's account."
+              }
+            }
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Patient static information updated successfully."
+          }
+        }
+      }
+    } 
+  },
+  "definitions": {
+    "Ingredient": {
+      "type": "object",
+      "properties": {
+           "calories": {
+             "type": "number"
+           },
+          "carbs": {
+            "type": "number"
+          },
+          "cup": {
+            "type": "number"
+          },
+          "fat": {
+            "type": "number"
+          },
+          "grammes": {
+            "type": "number"
+          },
+          "ingredient_id": {
+            "type": "string"
+          },
+           "large": {
+             "type": "number"
+           },
+           "liters": {
+             "type": "number"
+           },
+           "medium": {
+             "type": "number"
+           },
+           "name": {
+             "type": "string"
+           },
+           "protein": {
+             "type": "number"
+           },
+          "small": {
+            "type": "number"
+          },
+           "tbsp": {
+             "type": "number"
+           },
+           "tsp": {
+             "type": "number"
+           }
+      }
+    },
+    "CreateIngredient": {
+      "type": "object",
+      "properties": {
+           "calories": {
+             "type": "number"
+           },
+          "carbs": {
+            "type": "number"
+          },
+          "cup": {
+            "type": "number"
+          },
+          "fat": {
+            "type": "number"
+          },
+          "grammes": {
+            "type": "number"
+          },
+           "large": {
+             "type": "number"
+           },
+           "liters": {
+             "type": "number"
+           },
+           "medium": {
+             "type": "number"
+           },
+           "name": {
+             "type": "string"
+           },
+           "protein": {
+             "type": "number"
+           },
+          "small": {
+            "type": "number"
+          },
+           "tbsp": {
+             "type": "number"
+           },
+           "tsp": {
+             "type": "number"
+           }
+      }
+    },
+   "Diet": {
+      "type": "object",
+      "properties": {
+        "calories_intake": {
+          "type": "number"
+        },
+        "carbs_intake": {
+          "type": "number"
+        },
+        "diet_id": {
+          "type": "string"
+        },
+        "end_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "fat_intake": {
+          "type": "number"
+        },
+        "meals_nbr": {
+          "type": "number"
+        },
+        "patient_id": {
+          "type": "string"
+        },
+        "protein_intake": {
+          "type": "number"
+        },
+        "start_date": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "CreateDiet": {
+      "type": "object",
+      "properties": {
+        "patient_id": {
+          "type": "string"
+        },
+        "start_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "end_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "calories_intake": {
+          "type": "number"
+        },
+        "fat_intake": {
+          "type": "number"
+        },
+        "carbs_intake": {
+          "type": "number"
+        },
+        "protein_intake": {
+          "type": "number"
+        },
+        "meals_nbr": {
+          "type": "number"
+        }
+      }
+    },
+    "LifeStyle": {
+      "type": "object",
+      "properties": {
+        "patient_ID": {
+          "type": "string"
+        },
+        "measurement_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "physical_activity": {
+          "type": "string"
+        },
+        "sleep_quality": {
+          "type": "string"
+        },
+        "smoker": {
+          "type": "boolean"
+        },
+        "alcohol_consumption": {
+          "type": "boolean"
+        },
+        "usual_wake_up_time": {
+          "type": "string",
+          "format": "time"
+        },
+        "usual_bed_time": {
+          "type": "string",
+          "format": "time"
+        },
+        "favorite_food": {
+          "type": "string"
+        },
+        "disliked_food": {
+          "type": "string"
+        },
+        "water_intake": {
+          "type": "number"
+        },
+        "eating_behaviour": {
+          "type": "string"
+        }
+      }
+    },
+    "BodyComp": {
+      "type": "object",
+      "properties": {
+        "patient_id": {
+          "type": "string"
+        },
+        "measurement_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "body_fat_percentage": {
+          "type": "number"
+        },
+        "fat_mass": {
+          "type": "number"
+        },
+        "muscle_mass": {
+          "type": "number"
+        },
+        "muscle_mass_percentage": {
+          "type": "number"
+        },
+        "body_type": {
+          "type": "string"
+        }
+      }
+    },
+    "Anthropometry": {
+      "type": "object",
+      "properties": {
+        "patient_id": {
+          "type": "string"
+        },
+        "measurement_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "weight": {
+          "type": "number"
+        },
+        "height": {
+          "type": "number"
+        },
+        "waist_circumference": {
+          "type": "number"
+        },
+        "hip_circumference": {
+          "type": "number"
+        },
+        "abdominal_skinfold": {
+          "type": "number"
+        },
+        "chest_skinfold": {
+          "type": "number"
+        },
+        "front_thigh_skinfold": {
+          "type": "number"
+        },
+        "midaxillary_skinfold": {
+          "type": "number"
+        },
+        "subscapular_skinfold": {
+          "type": "number"
+        },
+        "suprailiac_skinfold": {
+          "type": "number"
+        },
+        "triceps_skinfold": {
+          "type": "number"
+        }
+      }
+    },
+    "HealthHist": {
+      "type": "object",
+      "properties": {
+        "patient_id": {
+          "type": "string"
+        },
+        "measurement_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "medical_diseases": {
+          "type": "string"
+        },
+        "medication": {
+          "type": "string"
+        },
+        "family_history": {
+          "type": "string"
+        },
+        "personal_history": {
+          "type": "string"
+        },
+        "bowel_movement": {
+          "type": "string"
+        },
+        "allergies_intolerences": {
+          "type": "string"
+        },
+        "diastolic_bp": {
+          "type": "number"
+        },
+        "systolic_bp": {
+          "type": "number"
+        },
+        "hdl_cholesterol": {
+          "type": "number"
+        },
+        "ldl_cholesterol": {
+          "type": "number"
+        },
+        "total_cholesterol": {
+          "type": "number"
+        },
+        "triglycerides": {
+          "type": "number"
+        }
+      }
+    },
+    "MealPrep": {
+      "type": "object",
+      "properties": {
+        "diet_id": {
+          "type": "string",
+          "description": "ID of the diet."
+        },
+        "recipee_id": {
+          "type": "string",
+          "description": "ID of the recipe."
+        },
+        "date": {
+          "type": "string",
+          "format": "date",
+          "description": "Date of the meal preparation."
+        },
+        "meal_id": {
+          "type": "string",
+          "description": "ID of the meal."
+        },
+        "patient_id": {
+          "type": "string",
+          "description": "ID of the patient."
+        },
+        "diet_start_date": {
+          "type": "string",
+          "format": "date",
+          "description": "Start date of the diet."
+        }
+      },
+      "required": [
+        "diet_id",
+        "recipee_id",
+        "date",
+        "meal_id",
+        "patient_id",
+        "diet_start_date"
+      ]
+    },
+    "Patient": {
+      "type": "object",
+      "properties": {
+        "patient_id": {
+          "type": "string",
+          "description": "ID of the patient."
+        },
+        "first_name": {
+          "type": "string",
+          "description": "First name of the patient."
+        },
+        "last_name": {
+          "type": "string",
+          "description": "Last name of the patient."
+        },
+        "gender": {
+          "type": "string",
+          "description": "Gender of the patient."
+        },
+        "date_of_birth": {
+          "type": "string",
+          "format": "date",
+          "description": "Date of birth of the patient."
+        },
+        "phone": {
+          "type": "string",
+          "description": "Phone number of the patient."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address of the patient."
+        },
+        "address": {
+          "type": "string",
+          "description": "Address of the patient."
+        },
+        "dietitian_id": {
+          "type": "number",
+          "description": "ID of the dietitian associated with the patient."
+        },
+        "status": {
+          "type": "string",
+          "description": "Status of the patient's account."
+        }
+      },
+      "required": [
+        "patient_id",
+        "first_name",
+        "last_name",
+        "gender",
+        "date_of_birth",
+        "phone",
+        "email",
+        "address",
+        "dietitian_id",
+        "status"
+      ]
+    },
+    "CreatePatient": {
+      "type": "object",
+      "properties": {
+        
+        "first_name": {
+          "type": "string",
+          "description": "First name of the patient."
+        },
+        "last_name": {
+          "type": "string",
+          "description": "Last name of the patient."
+        },
+        "gender": {
+          "type": "string",
+          "description": "Gender of the patient."
+        },
+        "date_of_birth": {
+          "type": "string",
+          "format": "date",
+          "description": "Date of birth of the patient."
+        },
+        "phone": {
+          "type": "string",
+          "description": "Phone number of the patient."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address of the patient."
+        },
+        "address": {
+          "type": "string",
+          "description": "Address of the patient."
+        },
+        "dietitian_id": {
+          "type": "string",
+          "description": "ID of the dietitian associated with the patient."
+        },
+        "pwd": {
+          "type": "string",
+          "description": "Temporary Password of the patient's account."
+        }
+      },
+      "required": [
+        "patient_id",
+        "first_name",
+        "last_name",
+        "gender",
+        "date_of_birth",
+        "phone",
+        "email",
+        "address",
+        "dietitian_id",
+        "status"
+      ]
+    },
+    "Dietitian": {
+      "type": "object",
+      "properties": {
+        "dietitian_id": {
+          "type": "string",
+          "description": "ID of the Dietitian."
+        }, 
+        "first_name": {
+          "type": "string",
+          "description": "First name of the Dietitian."
+        },
+        "family_name": {
+          "type": "string",
+          "description": "Last name of the Dietitian."
+        },
+        "date_of_birth": {
+          "type": "string",
+          "format": "date",
+          "description": "Date of birth of the Dietitian."
+        },
+        "phone_number": {
+          "type": "string",
+          "description": "Phone number of the Dietitian."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address of the Dietitian."
+        }
+             }
+    },
+    "DietitianCreation": {
+      "type": "object",
+      "properties": {
+        "first_name": {
+          "type": "string",
+          "description": "First name of the Dietitian."
+        },
+        "family_name": {
+          "type": "string",
+          "description": "Last name of the Dietitian."
+        },
+        "date_of_birth": {
+          "type": "string",
+          "format": "date",
+          "description": "Date of birth of the Dietitian."
+        },
+        "phone_number": {
+          "type": "string",
+          "description": "Phone number of the Dietitian."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address of the Dietitian."
+        },
+        "pwd": {
+          "type": "string",
+          "description": "Email address of the Dietitian."
+        }
+             }
+    },
+    "DietitianUPD": {
+      "type": "object",
+      "properties": {
+        "dietitian_id": {
+          "type": "string",
+          "description": "ID of the Dietitian."
+        }, 
+        "first_name": {
+          "type": "string",
+          "description": "First name of the Dietitian."
+        },
+        "family_name": {
+          "type": "string",
+          "description": "Last name of the Dietitian."
+        },
+        "date_of_birth": {
+          "type": "string",
+          "format": "date",
+          "description": "Date of birth of the Dietitian."
+        },
+        "phone_number": {
+          "type": "string",
+          "description": "Phone number of the Dietitian."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address of the Dietitian."
+        },
+        "pwd": {
+          "type": "string",
+          "description": "Email address of the Dietitian."
+        }
+             }
+    },
+    "Recipee":{
+      "type": "object",
+      "properties": {
+        "recipee_id": {
+          "type": "number",
+          "description": "ID of the recipee."
+        },
+        "name": {
+          "type": "string",
+          "description": "recipee name."
+        },
+        "description": {
+          "type": "string",
+          "description": "recipee description."
+        },
+        "meal_type": {
+          "type": "string",
+          "description": "meal_type: Breakfast, Lunch, Dinner."
+        },
+        "calories": {
+          "type": "number",
+          "description": "calories of the recipee."
+        },
+        "fat": {
+          "type": "number",
+          "description": "fat of the recipee."
+        },
+        "protein": {
+          "type": "number",
+          "description": "protein of the recipee."
+        },
+        "servings": {
+          "type": "number",
+          "description": "servings of the recipee."
+        },
+        "carbs": {
+          "type": "number",
+          "description": "carbs of the recipee."
+        }
+        
+    }
+  },
+  "Combination":{
+    "type": "object",
+    "properties": {
+      "breakfast": {
+          "$ref": "#/definitions/Recipee"
+      },
+      "lunch": {
+          "$ref": "#/definitions/Recipee"
+      },
+      "dinner": {
+          "$ref": "#/definitions/Recipee"
+      },
+      "score": {
+        "type": "number",
+        "description": "score of the combination."
+      }
+  }
+}  ,
+"MealPrepItem": {
+  "type": "object",
+  "properties": {
+    "diet_id": {
+      "type": "number"
+    },
+    "recipee_id": {
+      "type": "number"
+    },
+    "meal_type": {
+      "type": "string"
+    },
+    "patient_id": {
+      "type": "number"
+    },
+    "diet_start_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "combinationnbr": {
+      "type": "number"
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "servings": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "diet_id",
+    "recipee_id",
+    "meal_type",
+    "patient_id",
+    "diet_start_date",
+    "combinationnbr"
+  ]
+},
+  "GenMealPrep":{
+    "type": "object",
+    "properties": {
+      "best_combinations": {
+        "type": "array",
+        "description": "Array of Breakfast - Lunch - Dinner Combinations.",
+        "items":{
+                "$ref": "#/definitions/Combination"
+              }
+            }
+          }
+        },
+    "shoppingListItem":{
+          "type": "object",
+          "properties": {
+            "ingredient_id": {
+              "type": "number",
+              "description": "ID of the ingredient."
+            },
+            "name": {
+              "type": "string",
+              "description": "ingredient name."
+            },
+            "grammes": {
+              "type": "number"
+             },
+             "liters": {
+              "type": "number"
+            },
+            "cup": {
+             "type": "number"
+            },
+            "tbsp": {
+              "type": "number"
+            },
+            "tsp": {
+              "type": "number"
+            },
+            "small": {
+             "type": "number"
+            },
+            "medium": {
+              "type": "number"
+            },
+            "large": {
+              "type": "number"
+            }
+        }
+      }
+      }
+}
