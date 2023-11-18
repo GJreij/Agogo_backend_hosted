@@ -5,10 +5,10 @@
     "title": "AGOGO API",
     "description": "API for AGOGO's APP."
   },
-  "host": "localhost:5000",
+  "host": "agogo-app-7648993f1c5c.herokuapp.com/",
   "basePath": "/",
   "schemes": [
-    "http"
+    "https"
   ],
   "paths": {
     "/dietitian/login": {
