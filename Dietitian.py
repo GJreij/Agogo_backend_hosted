@@ -34,7 +34,7 @@ class Dietitian:
 # STATIC METHODS TO BE USED
     @staticmethod
     def fetchDietitian(d_email,d_pwd):
-        try
+        try:
             if d_email == '' or d_pwd == '':
                 response = {
                         "status": "error",
@@ -66,7 +66,7 @@ class Dietitian:
 
     @staticmethod
     def fetchDietitianPatients(dietitian_ID):
-        try
+        try:
             if dietitian_ID == '':
                 response = {
                         "status": "error",
@@ -96,7 +96,7 @@ class Dietitian:
 #insert methods
     @staticmethod
     def createPatient(patientJSON):
-        try
+        try:
             patientData = json.loads(patientJSON)
             if patientData['dietitian_id'] == '' :
                 response = {

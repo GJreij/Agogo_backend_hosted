@@ -20,7 +20,8 @@ class Db_connection:
 
     @staticmethod   
     def closeConnection(conn):
-            conn.close();
+            conn.close()
+            Db_connection.CONNECTION = None;
 
     @staticmethod
     def getConnection():
