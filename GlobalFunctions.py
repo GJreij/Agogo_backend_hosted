@@ -61,7 +61,8 @@ class GlobalFunctions:
             "%b %d, %Y", # Nov 18, 2023 (Month abbreviation, day, year)
             # ... add other formats as needed
         ]
-
+        if date_str == None or date_str == '':
+            return date_str
         for format in date_formats:
             try:
                 # Try to parse the date using the current format
@@ -87,7 +88,8 @@ class GlobalFunctions:
             "%b %d, %Y", # Nov 18, 2023 (Month abbreviation, day, year)
             # ... add other formats as needed
         ]
-
+        if date_str == None or date_str == '':
+            return date_str        
         for format in date_formats:
             try:
                 # Try to parse the date using the current format
