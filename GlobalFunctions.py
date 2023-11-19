@@ -88,6 +88,7 @@ class GlobalFunctions:
             "%b %d, %Y", # Nov 18, 2023 (Month abbreviation, day, year)
             # ... add other formats as needed
         ]
+        print(date_str)
         if date_str == None or date_str == '':
             return date_str        
         for format in date_formats:

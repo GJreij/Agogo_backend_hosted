@@ -275,7 +275,7 @@ class Dietitian:
         try:                
             cur = Db_connection.getConnection().cursor()
             
-            query = "SELECT dietitian_id,first_name,family_name,to_char(date_of_birth, 'DD/MM/YYYY'),phone_number,email FROM dietitian"
+            query = "SELECT dietitian_id,first_name,family_name,to_char(date_of_birth, 'MM/DD/YYYY'),phone_number,email FROM dietitian"
             print(query)
             cur.execute(query)
             # dietitianID,Fname,Lname,DOB,phone,email
