@@ -47,10 +47,10 @@ class Dietitian:
             dietitian = cur.fetchall()
             if cur.rowcount == 1 :
                 dietitianR = Dietitian(dietitian[0][0],dietitian[0][1],dietitian[0][2],dietitian[0][3],dietitian[0][4],dietitian[0][5])
-                cur.close;
+                cur.close();
                 return dietitianR.dietitian_json();
             else :
-                cur.close;
+                cur.close();
                 result = {
                             "status": "error",
                             "message": "The email or password is incorrect"
@@ -82,7 +82,7 @@ class Dietitian:
             for patient in patients:
                 patientObject = Patient(patient[0],patient[1],patient[2],patient[3],patient[4],patient[5],patient[6],patient[7],patient[8],patient[9])
                 jsonPatientsArray.append(patientObject.Patient_json())
-            cur.close;
+            cur.close();
             return GlobalFunctions.cleanJSON(jsonPatientsArray);
 
         except psycopg2.Error as e:
@@ -120,6 +120,7 @@ class Dietitian:
                         , patientData['pwd'], 'ACTIVE'));
             patient_ID = cur.fetchone()[0]
             Db_connection.commit();
+            cur.close();
             patientData['patient_id'] = str(patient_ID)
             patientR = Patient(str(patient_ID),patientData['first_name'],patientData['last_name'], patientData['gender'],patientData['date_of_birth'],
                             patientData['phone'], patientData['email'], patientData['address'], patientData['dietitian_id'],'ACTIVE')
@@ -136,35 +137,62 @@ class Dietitian:
     
     @staticmethod
     def deactivatePatient(patient_ID):
-        if patient_ID == '' :
-            return 'Patient ID is missing'
-        cur = Db_connection.getConnection().cursor()
-        cur.execute("UPDATE patient_static_info SET status= %s WHERE patient_id= %s",("UNACTIVE",patient_ID));
-        Db_connection.commit();
-        return patient_ID
+        try:
+            if patient_ID == '' :
+                response = {
+                        "status": "error",
+                        "message": "Please set a temporary password for the client"
+                    }            
+                return json.dumps(response)
+            cur = Db_connection.getConnection().cursor()
+            cur.execute("UPDATE patient_static_info SET status= %s WHERE patient_id= %s",("UNACTIVE",patient_ID));
+            Db_connection.commit();
+            cur.close();
+            return patient_ID
+        except psycopg2.Error as e:
+            response = {
+                        "status": "error",
+                        "message": "DB error: " + str(e)
+                    }
+            Db_connection.closeConnection(Db_connection.getConnection());            
+            return json.dumps(response) 
 
     @staticmethod
     def activatePatient(patient_ID):
-        if patient_ID == '' :
-            return 'Patient ID is missing'
-        cur = Db_connection.getConnection().cursor()
-        cur.execute("UPDATE patient_static_info SET status= %s WHERE patient_id= %s",("ACTIVE",patient_ID));
-        Db_connection.commit();
-        return patient_ID
+        try:
+            if patient_ID == '' :
+                response = {
+                        "status": "error",
+                        "message": "Please add a patient ID"
+                    }            
+                return json.dumps(response)
+            
+            cur = Db_connection.getConnection().cursor()
+            cur.execute("UPDATE patient_static_info SET status= %s WHERE patient_id= %s",("ACTIVE",patient_ID));
+            Db_connection.commit();
+            cur.close();
+            return patient_ID
+    
+        except psycopg2.Error as e:
+            response = {
+                        "status": "error",
+                        "message": "DB error: " + str(e)
+                    }
+            Db_connection.closeConnection(Db_connection.getConnection());            
+            return json.dumps(response) 
 
 
     
     @staticmethod
     def addDietitian(dietitianData):
         dietitianData = json.loads(dietitianData)
-        cur = Db_connection.getConnection().cursor()
         
         try:
+            cur = Db_connection.getConnection().cursor()
             query = 'INSERT INTO dietitian ' + GlobalFunctions.buildInsertQuery(dietitianData) + ' RETURNING dietitian_id' 
             print(query)
             
             cur.execute(query)
-            
             # Commit the transaction
             Db_connection.commit()
             
@@ -172,7 +200,7 @@ class Dietitian:
             dietitian_id = cur.fetchone()[0]
             
             # Close the cursor
-            cur.close()
+            cur.close();
             response = {
                         "status": "success",
                         "message": "Operation completed successfully.",
@@ -278,7 +306,11 @@ class Dietitian:
     def removeDietitian(dietitian_id):
         try:
             if dietitian_id  == '':
-                return "dietitian_id is missing" 
+                response = {
+                        "status": "error",
+                        "message": "dietitian_id is missing"
+                    }            
+                return json.dumps(response) 
                 
             cur = Db_connection.getConnection().cursor()
             query = "DELETE FROM dietitian WHERE dietitian_id = %s"
@@ -290,9 +322,24 @@ class Dietitian:
             cur.close()
             
             if cur.rowcount:
-                return f"dietitian with ID: {dietitian_id} deleted successfully."
+                response = {
+                        "status": "success",
+                        "message": "Dietitian removed successfully",
+                        "dietitian_id" : dietitian_id
+                    }
+                return json.dumps(response) 
             else:
-                return f"No dietitian found with ID: {dietitian_id}"
+                response = {
+                        "status": "error",
+                        "message": "Dietitian not found",
+                        "dietitian_id" : dietitian_id
+                    }
+                return json.dumps(response) 
     
         except psycopg2.Error as e:
-            return f"Database error: {e}"
+            Db_connection.closeConnection(Db_connection.getConnection());
+            response = {
+                        "status": "error",
+                        "message": "DB error: " + str(e)
+                    }            
+            return json.dumps(response)
