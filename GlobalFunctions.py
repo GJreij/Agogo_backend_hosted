@@ -52,7 +52,7 @@ class GlobalFunctions:
         return json_obj
     
     @staticmethod
-    def convert_date_to_yyyy_mm_dd(date_str):
+    def convert_date_to_DB_yyyy_mm_dd(date_str):
         # Define possible date formats
         date_formats = [
             "%d-%m-%Y",  # DD-MM-YYYY
@@ -68,6 +68,31 @@ class GlobalFunctions:
                 parsed_date = datetime.strptime(date_str, format)
                 # If parsing is successful, return the date in YYYY-MM-DD format
                 return parsed_date.strftime("%Y-%m-%d")
+            except ValueError:
+                # If parsing fails, try the next format
+                continue
+            
+        # If none of the formats match, return an error message or handle as needed
+        return "Invalid date format"
+    
+    @staticmethod
+    def convert_date_to_FE_mm_dd_yyyy(date_str):
+        # Define possible date formats
+        date_formats = [
+            "%Y-%m-%d",  # YYYY-MM-DD   
+            "%d-%m-%Y",  # DD-MM-YYYY
+            "%m/%d/%Y",  # MM/DD/YYYY
+            "%Y/%m/%d",  # YYYY/MM/DD
+            "%b %d, %Y", # Nov 18, 2023 (Month abbreviation, day, year)
+            # ... add other formats as needed
+        ]
+
+        for format in date_formats:
+            try:
+                # Try to parse the date using the current format
+                parsed_date = datetime.strptime(date_str, format)
+                # If parsing is successful, return the date in YYYY-MM-DD format
+                return parsed_date.strftime("%m/%d/%Y")
             except ValueError:
                 # If parsing fails, try the next format
                 continue

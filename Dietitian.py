@@ -24,6 +24,7 @@ class Dietitian:
 
     def dietitian_json(self):
         print('json dietitian______')
+        self.date_of_birth = GlobalFunctions.convert_date_to_FE_mm_dd_yyyy(self.date_of_birth)
         jsonDietitian = json.dumps(vars(self));
         jsonDietitian = jsonDietitian.replace(r'"{\\', '{').replace('\\', '').replace('}"','}')
         print(jsonDietitian)
@@ -42,7 +43,7 @@ class Dietitian:
                     }            
                 return json.dumps(response)
             cur = Db_connection.getConnection().cursor()
-            cur.execute("select d.dietitian_id, d.first_name , d.family_name , to_char(d.date_of_birth, 'DD/MM/YYYY'), d.phone_number ,d.email from dietitian d where d.email = %s and d.pwd = %s",(d_email,d_pwd))
+            cur.execute("select d.dietitian_id, d.first_name , d.family_name , to_char(d.date_of_birth, 'MM/DD/YYYY'), d.phone_number ,d.email from dietitian d where d.email = %s and d.pwd = %s",(d_email,d_pwd))
             dietitian = cur.fetchall()
             if cur.rowcount == 1 :
                 dietitianR = Dietitian(dietitian[0][0],dietitian[0][1],dietitian[0][2],dietitian[0][3],dietitian[0][4],dietitian[0][5])
@@ -75,7 +76,7 @@ class Dietitian:
                 return json.dumps(response)
 
             cur = Db_connection.getConnection().cursor()
-            cur.execute("select p.patient_id ,p.first_name ,p.last_name ,p.gender ,to_char(p.date_of_birth, 'DD/MM/YYYY'),p.phone ,p.email ,p.address ,p.dietitian_id ,p.status  from patient_static_info p where p.dietitian_id = %s",(dietitian_ID))
+            cur.execute("select p.patient_id ,p.first_name ,p.last_name ,p.gender ,to_char(p.date_of_birth, 'MM/DD/YYYY'),p.phone ,p.email ,p.address ,p.dietitian_id ,p.status  from patient_static_info p where p.dietitian_id = %s",(dietitian_ID))
             patients = cur.fetchall()
             jsonPatientsArray = [];
             for patient in patients:
@@ -104,6 +105,7 @@ class Dietitian:
                         "message": "Please enter a dietitian_ID"
                     }            
                 return json.dumps(response)
+            
             if patientData['pwd'] =='' :
                 response = {
                         "status": "error",
@@ -112,7 +114,8 @@ class Dietitian:
                 return json.dumps(response)
             cur = Db_connection.getConnection().cursor()
             cur.execute("INSERT INTO public.patient_static_info (first_name, last_name, gender, date_of_birth, phone, email, address, dietitian_id, pwd, status) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING patient_id"
-                        ,(patientData['first_name'], patientData['last_name'], patientData['gender'], patientData['date_of_birth'], 
+                        ,(patientData['first_name'], patientData['last_name'], patientData['gender'],
+                        GlobalFunctions.convert_date_to_DB_yyyy_mm_dd(patientData['date_of_birth']), 
                         patientData['phone'], patientData['email'], patientData['address'], patientData['dietitian_id']
                         , patientData['pwd'], 'ACTIVE'));
             patient_ID = cur.fetchone()[0]
