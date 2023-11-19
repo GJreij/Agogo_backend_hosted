@@ -43,7 +43,7 @@
             }
           },
           "400": {
-            "description": "Email or password is missing or incorrect, or other bad request."
+            "$ref": "#/definitions/apiResponse"
           }
         }
       }
@@ -200,7 +200,7 @@
         "description": "Create a new Dietitian",
         "parameters": [
           {
-            "name": "patientDetails",
+            "name": "dietitianDetails",
             "in": "body",
             "required": true,
             "schema": {
@@ -210,7 +210,15 @@
         ],
         "responses": {
           "200": {
-            "description": "Dietitian added successfully with ID: {dietitian_id}"
+            "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
           }
         }
       }
@@ -232,7 +240,18 @@
         ],
         "responses": {
           "200": {
-            "description": "dietitian with ID: {dietitian_id} updated successfully."
+            "type": "object",
+              "properties": {
+                "dietitian_id": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
           }
         }
       }
@@ -1946,10 +1965,6 @@
         "email": {
           "type": "string",
           "description": "Email address of the Dietitian."
-        },
-        "pwd": {
-          "type": "string",
-          "description": "Email address of the Dietitian."
         }
              }
     },
@@ -2134,6 +2149,20 @@
               "type": "number"
             }
         }
+      },
+      "apiResponse":{
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "success or error"
+          },
+          "message": {
+            "type": "string",
+            "description": "error message"
+          }
+          
       }
+    }
       }
 }

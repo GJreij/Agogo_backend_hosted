@@ -34,60 +34,102 @@ class Dietitian:
 # STATIC METHODS TO BE USED
     @staticmethod
     def fetchDietitian(d_email,d_pwd):
-        cur = Db_connection.getConnection().cursor()
-        if d_email == '' or d_pwd == '':
-            return('Please enter an Email and Password');
-        cur.execute("select d.dietitian_id, d.first_name , d.family_name , to_char(d.date_of_birth, 'DD/MM/YYYY'), d.phone_number ,d.email from dietitian d where d.email = %s and d.pwd = %s",(d_email,d_pwd))
-        dietitian = cur.fetchall()
-        if cur.rowcount == 1 :
-            print(cur.rowcount)
-            dietitianR = Dietitian(dietitian[0][0],dietitian[0][1],dietitian[0][2],dietitian[0][3],dietitian[0][4],dietitian[0][5])
-            cur.close;
-            return dietitianR.dietitian_json();
-        else :
-            cur.close;
-            return('The email or password is incorrect');
+        try
+            if d_email == '' or d_pwd == '':
+                response = {
+                        "status": "error",
+                        "message": "Please enter a valid Email and Password"
+                    }            
+                return json.dumps(response)
+            cur = Db_connection.getConnection().cursor()
+            cur.execute("select d.dietitian_id, d.first_name , d.family_name , to_char(d.date_of_birth, 'DD/MM/YYYY'), d.phone_number ,d.email from dietitian d where d.email = %s and d.pwd = %s",(d_email,d_pwd))
+            dietitian = cur.fetchall()
+            if cur.rowcount == 1 :
+                dietitianR = Dietitian(dietitian[0][0],dietitian[0][1],dietitian[0][2],dietitian[0][3],dietitian[0][4],dietitian[0][5])
+                cur.close;
+                return dietitianR.dietitian_json();
+            else :
+                cur.close;
+                result = {
+                            "status": "error",
+                            "message": "The email or password is incorrect"
+                        };
+                return result;
+        except psycopg2.Error as e:
+            response = {
+                        "status": "error",
+                        "message": "DB error: " + str(e)
+                    }
+            Db_connection.closeConnection(Db_connection.getConnection());              
+            return json.dumps(response)        
 
 
     @staticmethod
     def fetchDietitianPatients(dietitian_ID):
-        cur = Db_connection.getConnection().cursor()
-        if dietitian_ID == '':
-            cur.close
-            return('dietitian_ID is missing');
-        cur.execute("select p.patient_id ,p.first_name ,p.last_name ,p.gender ,to_char(p.date_of_birth, 'DD/MM/YYYY'),p.phone ,p.email ,p.address ,p.dietitian_id ,p.status  from patient_static_info p where p.dietitian_id = %s",(dietitian_ID))
-        patients = cur.fetchall()
-        #patientsArray = [];
-        jsonPatientsArray = [];
-        for patient in patients:
-            patientObject = Patient(patient[0],patient[1],patient[2],patient[3],patient[4],patient[5],patient[6],patient[7],patient[8],patient[9])
-            #patientsArray.append(patientObject)
-            jsonPatientsArray.append(patientObject.Patient_json())
-        cur.close;
-        return jsonPatientsArray;
+        try
+            if dietitian_ID == '':
+                response = {
+                        "status": "error",
+                        "message": "Please enter a dietitian_ID"
+                    }            
+                return json.dumps(response)
+
+            cur = Db_connection.getConnection().cursor()
+            cur.execute("select p.patient_id ,p.first_name ,p.last_name ,p.gender ,to_char(p.date_of_birth, 'DD/MM/YYYY'),p.phone ,p.email ,p.address ,p.dietitian_id ,p.status  from patient_static_info p where p.dietitian_id = %s",(dietitian_ID))
+            patients = cur.fetchall()
+            jsonPatientsArray = [];
+            for patient in patients:
+                patientObject = Patient(patient[0],patient[1],patient[2],patient[3],patient[4],patient[5],patient[6],patient[7],patient[8],patient[9])
+                jsonPatientsArray.append(patientObject.Patient_json())
+            cur.close;
+            return GlobalFunctions.cleanJSON(jsonPatientsArray);
+
+        except psycopg2.Error as e:
+            response = {
+                        "status": "error",
+                        "message": "DB error: " + str(e)
+                    } 
+            Db_connection.closeConnection(Db_connection.getConnection());             
+            return json.dumps(response)     
 
 
 #insert methods
     @staticmethod
     def createPatient(patientJSON):
-        patientData = json.loads(patientJSON)
-        if patientData['dietitian_id'] == '' :
-            return 'Dietitian ID is missing'
-        if patientData['pwd'] =='' :
-            return 'please set a temporary password for the client'
-        cur = Db_connection.getConnection().cursor()
-        cur.execute("INSERT INTO public.patient_static_info (first_name, last_name, gender, date_of_birth, phone, email, address, dietitian_id, pwd, status) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING patient_id"
-                    ,(patientData['first_name'], patientData['last_name'], patientData['gender'], patientData['date_of_birth'], 
-                      patientData['phone'], patientData['email'], patientData['address'], patientData['dietitian_id']
-                      , patientData['pwd'], 'ACTIVE'));
-        patient_ID = cur.fetchone()[0]
-        print('patient ID is ',patient_ID)
-        Db_connection.commit();
-        patientData['patient_id'] = str(patient_ID)
-        patientR = Patient(str(patient_ID),patientData['first_name'],patientData['last_name'], patientData['gender'],patientData['date_of_birth'],
-                          patientData['phone'], patientData['email'], patientData['address'], patientData['dietitian_id'],'ACTIVE')
-        
-        return patientR.Patient_json();
+        try
+            patientData = json.loads(patientJSON)
+            if patientData['dietitian_id'] == '' :
+                response = {
+                        "status": "error",
+                        "message": "Please enter a dietitian_ID"
+                    }            
+                return json.dumps(response)
+            if patientData['pwd'] =='' :
+                response = {
+                        "status": "error",
+                        "message": "Please set a temporary password for the client"
+                    }            
+                return json.dumps(response)
+            cur = Db_connection.getConnection().cursor()
+            cur.execute("INSERT INTO public.patient_static_info (first_name, last_name, gender, date_of_birth, phone, email, address, dietitian_id, pwd, status) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING patient_id"
+                        ,(patientData['first_name'], patientData['last_name'], patientData['gender'], patientData['date_of_birth'], 
+                        patientData['phone'], patientData['email'], patientData['address'], patientData['dietitian_id']
+                        , patientData['pwd'], 'ACTIVE'));
+            patient_ID = cur.fetchone()[0]
+            Db_connection.commit();
+            patientData['patient_id'] = str(patient_ID)
+            patientR = Patient(str(patient_ID),patientData['first_name'],patientData['last_name'], patientData['gender'],patientData['date_of_birth'],
+                            patientData['phone'], patientData['email'], patientData['address'], patientData['dietitian_id'],'ACTIVE')
+            
+            return patientR.Patient_json();
+        except psycopg2.Error as e:
+            response = {
+                        "status": "error",
+                        "message": "DB error: " + str(e)
+                    }
+            Db_connection.closeConnection(Db_connection.getConnection());            
+            return json.dumps(response) 
+
     
     @staticmethod
     def deactivatePatient(patient_ID):
