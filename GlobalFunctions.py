@@ -65,7 +65,8 @@ class GlobalFunctions:
         for format in date_formats:
             try:
                 # Try to parse the date using the current format
-                parsed_date = datetime.strptime(date_str, format)
+                parsed_date = datetime.datetime.strptime(date_str, format)
+                
                 # If parsing is successful, return the date in YYYY-MM-DD format
                 return parsed_date.strftime("%Y-%m-%d")
             except ValueError:
@@ -90,7 +91,7 @@ class GlobalFunctions:
         for format in date_formats:
             try:
                 # Try to parse the date using the current format
-                parsed_date = datetime.strptime(date_str, format)
+                parsed_date = datetime.datetime.strptime(date_str, format)
                 # If parsing is successful, return the date in YYYY-MM-DD format
                 return parsed_date.strftime("%m/%d/%Y")
             except ValueError:
