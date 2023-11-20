@@ -7,16 +7,22 @@ class Db_connection:
     def __init__(self):
          if Db_connection.CONNECTION is None :
             try:
-                DATABASE_URL = os.environ.get('DATABASE_URL')
-                print("_____________________________DB URL________________________")
-                print(DATABASE_URL)
-                print("_____________________________DB URL________________________")
-                # Db_connection.CONNECTION = psycopg2.connect(
-                #     host=DATABASE_URL,
-                #     database="dcj6hl3o3cvaap",
-                #     user="bajatgftwonfnl",
-                #     password="c66062136ae4b2b13ce557cb3769166df66ff613c3d490362673faa03b68272f")
-                Db_connection.CONNECTION = psycopg2.connect(DATABASE_URL)
+                # set this as true before pushing to Heroku - False to test locally
+                HOST = True
+
+                if HOST == True : 
+                    DATABASE_URL = os.environ.get('DATABASE_URL')
+                    # print("_____________________________DB URL________________________")
+                    # print(DATABASE_URL)
+                    # print("_____________________________DB URL________________________")
+                    Db_connection.CONNECTION = psycopg2.connect(DATABASE_URL)
+                else:
+                    Db_connection.CONNECTION = psycopg2.connect(
+                        host="ec2-54-84-182-168.compute-1.amazonaws.com",
+                        database="d2ilrifjdtgek9",
+                        user="shrsqsidsjoura",
+                        password="6074e564a2a43920ebd225ebe01079410db96fda4fa0c344bf399f9d6d982b70")
+                    
                 print('connecting')
             except Exception as error:
                 print("Error: Connection not established {}".format(error))
