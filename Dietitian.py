@@ -218,6 +218,7 @@ class Dietitian:
             return json.dumps(response)
     
     
+    
     @staticmethod
     def updateDietitian(updated_data):
         updated_data = json.loads(updated_data)
