@@ -7,8 +7,10 @@ class Db_connection:
     def __init__(self):
          if Db_connection.CONNECTION is None :
             try:
+                DATABASE_URL = os.environ.get('DATABASE_URL')
+                print(DATABASE_URL)
                 Db_connection.CONNECTION = psycopg2.connect(
-                    host="ec2-44-213-228-107.compute-1.amazonaws.com",
+                    host=DATABASE_URL,
                     database="dcj6hl3o3cvaap",
                     user="bajatgftwonfnl",
                     password="c66062136ae4b2b13ce557cb3769166df66ff613c3d490362673faa03b68272f")
