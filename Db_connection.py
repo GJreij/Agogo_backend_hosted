@@ -8,12 +8,15 @@ class Db_connection:
          if Db_connection.CONNECTION is None :
             try:
                 DATABASE_URL = os.environ.get('DATABASE_URL')
+                print("_____________________________DB URL________________________")
                 print(DATABASE_URL)
-                Db_connection.CONNECTION = psycopg2.connect(
-                    host=DATABASE_URL,
-                    database="dcj6hl3o3cvaap",
-                    user="bajatgftwonfnl",
-                    password="c66062136ae4b2b13ce557cb3769166df66ff613c3d490362673faa03b68272f")
+                print("_____________________________DB URL________________________")
+                # Db_connection.CONNECTION = psycopg2.connect(
+                #     host=DATABASE_URL,
+                #     database="dcj6hl3o3cvaap",
+                #     user="bajatgftwonfnl",
+                #     password="c66062136ae4b2b13ce557cb3769166df66ff613c3d490362673faa03b68272f")
+                Db_connection.CONNECTION = psycopg2.connect(DATABASE_URL)
                 print('connecting')
             except Exception as error:
                 print("Error: Connection not established {}".format(error))
