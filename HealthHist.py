@@ -1,3 +1,4 @@
+import psycopg2
 from werkzeug.exceptions import BadRequest
 import json
 from Db_connection import Db_connection
@@ -27,14 +28,13 @@ class HealthHist:
         
         
     def HealthHist_json(self):
+        self.measurement_date = GlobalFunctions.convert_date_to_FE_mm_dd_yyyy(self.measurement_date)
         return json.dumps(vars(self),default=str);
 
     @staticmethod
     def fetchPatientHealthHistList(p_ID):
         cur = Db_connection.getConnection().cursor()
-        if p_ID == '' :
-            return('Please select a patient to display');
-        cur.execute("SELECT patient_id, to_char(measurement_date, 'DD/MM/YYYY'), medical_diseases, medication, family_history, personal_history, bowel_movement, allergies_intolerences, diastolic_bp, systolic_bp, hdl_cholesterol, ldl_cholesterol, total_cholesterol, triglycerides FROM public.health_history where patient_id = %s ORDER BY measurement_date desc",(p_ID))
+        cur.execute("SELECT patient_id, to_char(measurement_date, 'MM/DD/YYYY'), medical_diseases, medication, family_history, personal_history, bowel_movement, allergies_intolerences, diastolic_bp, systolic_bp, hdl_cholesterol, ldl_cholesterol, total_cholesterol, triglycerides FROM public.health_history where patient_id = %s ORDER BY measurement_date desc",(p_ID))
         result = cur.fetchall()
         cur.close
         return result
@@ -42,39 +42,116 @@ class HealthHist:
 
     @staticmethod
     def fetchPatientLastHealthHist(p_ID):
-        if p_ID == '' :
-            return('Please select a patient to display');
-        healthhists = HealthHist.fetchPatientHealthHistList(p_ID);
-        lastHealthH = HealthHist(healthhists[0][0],healthhists[0][1],healthhists[0][2],healthhists[0][3],healthhists[0][4],healthhists[0][5],healthhists[0][6],healthhists[0][7],healthhists[0][8],healthhists[0][9],healthhists[0][10],healthhists[0][11],healthhists[0][12],healthhists[0][13])
-        return lastHealthH.HealthHist_json();
-        
+        err_msg = None
+        if p_ID == '' or p_ID == None:
+            err_msg = 'Patient ID is missing'
+        #response if error
+        if err_msg != None:
+            response = {
+                        "status": "error",
+                        "message": err_msg
+                    }            
+            return json.dumps(response)
+            
+        try:
+            healthhists = HealthHist.fetchPatientHealthHistList(p_ID);
+            if len(healthhists) == 0 :
+                response = {
+                        "status": "error",
+                        "message": "Patient has no Health History info"
+                    }
+                return json.dumps(response)            
+            lastHealthH = HealthHist(healthhists[0][0],healthhists[0][1],healthhists[0][2],healthhists[0][3],healthhists[0][4],healthhists[0][5],healthhists[0][6],healthhists[0][7],healthhists[0][8],healthhists[0][9],healthhists[0][10],healthhists[0][11],healthhists[0][12],healthhists[0][13])
+            return lastHealthH.HealthHist_json();
+        except psycopg2.Error as e:
+            response = {
+                        "status": "error",
+                        "message": "DB error: " + str(e)
+                    }
+            Db_connection.closeConnection(Db_connection.getConnection());              
+            return json.dumps(response)  
+        except Exception as e:
+            response = {
+                        "status": "error",
+                        "message": "Server error: " + str(e)
+                    }
+            Db_connection.closeConnection(Db_connection.getConnection());              
+            return json.dumps(response) 
 
     @staticmethod
     def fetchPatientAllHealthHist(p_ID):
-        if p_ID == '' :
-            return('Please select a patient to display');
-        healthhists = HealthHist.fetchPatientHealthHistList(p_ID);
-        jsonHist = [];
-        for healthhist in healthhists:
-            histObject = HealthHist(healthhist[0],healthhist[1],healthhist[2],healthhist[3],healthhist[4],healthhist[5],healthhist[6],healthhist[7],healthhist[8],healthhist[9],healthhist[10],healthhist[11],healthhist[12],healthhist[13])
-            jsonHist.append(histObject.HealthHist_json())
-        return jsonHist;
-
+        err_msg = None
+        if p_ID == '' or p_ID == None:
+            err_msg = 'Patient ID is missing'
+        #response if error
+        if err_msg != None:
+            response = {
+                        "status": "error",
+                        "message": err_msg
+                    }            
+            return json.dumps(response)
+        try:
+            healthhists = HealthHist.fetchPatientHealthHistList(p_ID);
+            jsonHist = [];
+            for healthhist in healthhists:
+                histObject = HealthHist(healthhist[0],healthhist[1],healthhist[2],healthhist[3],healthhist[4],healthhist[5],healthhist[6],healthhist[7],healthhist[8],healthhist[9],healthhist[10],healthhist[11],healthhist[12],healthhist[13])
+                jsonHist.append(histObject.HealthHist_json())
+            return GlobalFunctions.cleanJSON(jsonHist);
+        except psycopg2.Error as e:
+            response = {
+                        "status": "error",
+                        "message": "DB error: " + str(e)
+                    }
+            Db_connection.closeConnection(Db_connection.getConnection());              
+            return json.dumps(response)  
+        except Exception as e:
+            response = {
+                        "status": "error",
+                        "message": "Server error: " + str(e)
+                    }
+            Db_connection.closeConnection(Db_connection.getConnection());              
+            return json.dumps(response) 
 
     @staticmethod
     def addHealthHistory(patientJSON):
+        err_msg = None
         patient_data = json.loads(patientJSON)
         if 'patient_ID' in patient_data:
             if patient_data['patient_ID'] == '':
-                return "patient_ID is missing"
+                err_msg= "patient_ID is missing"
         else:
-            return "patient_ID is missing"   
-
-        query = 'INSERT INTO health_history ' + GlobalFunctions.buildInsertQuery(patient_data) 
-        print(query)
-        cur = Db_connection.getConnection().cursor()
-        cur.execute(query)
-        Db_connection.commit();
-        return "health_history log addedsuccessfully"
-    
-    
+            err_msg= "patient_ID is missing"   
+        #response if error
+        if err_msg != None:
+            response = {
+                        "status": "error",
+                        "message": err_msg
+                    }            
+            return json.dumps(response)
+        try:
+            query = 'INSERT INTO health_history ' + GlobalFunctions.buildInsertQuery(patient_data) 
+            print(query)
+            cur = Db_connection.getConnection().cursor()
+            cur.execute(query)
+            Db_connection.commit();
+            cur.close()
+            response = {
+                        "status": "success",
+                        "message": "Health history log added successfully"
+                    }            
+            return json.dumps(response)
+        
+        except psycopg2.Error as e:
+            response = {
+                        "status": "error",
+                        "message": "DB error: " + str(e)
+                    }
+            Db_connection.closeConnection(Db_connection.getConnection());              
+            return json.dumps(response)  
+        except Exception as e:
+            response = {
+                        "status": "error",
+                        "message": "Server error: " + str(e)
+                    }
+            Db_connection.closeConnection(Db_connection.getConnection());              
+            return json.dumps(response) 

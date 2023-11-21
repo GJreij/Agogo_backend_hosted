@@ -18,21 +18,13 @@
         "description": "Authenticate and retrieve details for a dietitian based on email and password.",
         "parameters": [
           {
-            "name": "dietitian_email",
-            "in": "body",
+            "name": "dietitian_ID",
+            "in": "query",
             "required": true,
-            "description": "Email of the dietitian.",
             "schema": {
-              "type": "object",
-              "properties": {
-                "dietitian_email": {
-                  "type": "string"
-                },
-                "dietitian_pwd": {
-                  "type": "string"
-                }
-              }
-            }
+              "type": "string"
+            },
+            "description": "The ID of the dietitian"
           }
         ],
         "responses": {
@@ -78,17 +70,13 @@
         "description": "Fetch all patients of a specific dietitian",
         "parameters": [
           {
-            "name": "dietitianDetails",
-            "in": "body",
+            "name": "dietitian_ID",
+            "in": "query",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "dietitian_ID": {
-                  "type": "string"
-                }
-              }
-            }
+              "type": "string"
+            },
+            "description": "The ID of the dietitian"
           }
         ],
         "responses": {
@@ -285,7 +273,7 @@
       }
     },
     "/MealPrep/generateMealPlan": {
-      "get": {
+      "post": {
         "tags": ["Meal Plan Generation API"],
         "summary": "Generate meal plan using LSM",
         "description": "Generates a meal plan based on protein, carbs, and fat goals using Least Squares Method (LSM).",
@@ -330,7 +318,7 @@
       }
     },
     "/MealPrep/generateMealPlanFixedLunch": {
-      "get": {
+      "post": {
         "tags": ["Meal Plan Generation API"],
         "summary": "Generate meal plan with fixed lunch",
         "description": "Generates a meal plan with a fixed lunch ID.",
@@ -384,22 +372,23 @@
         "description": "Generates a shopping list based on the recipe ID.",
         "parameters": [
           {
-            "name": "shoppingListDetails",
-            "in": "body",
+            "name": "dietitian_ID",
+            "in": "query",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "dietitian_ID": {
-                  "type": "string"
-                },
-                "recipee_id": {
-                  "type": "string"
-                }
-              }
-            }
+              "type": "string"
+            },
+            "description": "The dietitian_ID"
+          },
+          {
+            "name": "recipee_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The recipee_id"
           }
-        
         ],
         "responses": {
           "200": {
@@ -477,25 +466,31 @@
         "description": "gets a specific saved combination based on the patient, diet, and combination ID",
         "parameters": [
           {
-            "name": "mealPlanDetails",
-            "in": "body",
+            "name": "diet_id",
+            "in": "query",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "diet_id": {
-                  "type": "integer",
-                  "format": "int64"
-                },
-                "patient_id": {
-                  "type": "integer",
-                  "format": "int64"
-                },
-                "combination_id": {
-                  "type": "integer",
-                  "format": "int64"
-                }}
-              }
+              "type": "string"
+            },
+            "description": "The ID of the diet"
+          },
+          {
+            "name": "patient_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the patient"
+          },
+          {
+            "name": "combination_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the combination"
           }
         ],
         "responses": {
@@ -518,21 +513,22 @@
         "description": "gets a all saved  combinations based on the patient and diet",
         "parameters": [
           {
-            "name": "mealPlanDetails",
-            "in": "body",
+            "name": "diet_id",
+            "in": "query",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "diet_id": {
-                  "type": "integer",
-                  "format": "int64"
-                },
-                "patient_id": {
-                  "type": "integer",
-                  "format": "int64"
-                }}
-              }
+              "type": "string"
+            },
+            "description": "The ID of the diet"
+          },
+          {
+            "name": "patient_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the patient"
           }
         ],
         "responses": {
@@ -559,17 +555,12 @@
         "parameters": [
           {
             "name": "recipee_id",
-            "in": "body",
+            "in": "query",
             "required": true,
-            "description": "ID of the recipee to be fetched.",
             "schema": {
-              "type": "object",
-              "properties": {
-                "ingredient_id": {
-                  "type": "string"
-                }
-              }
-            }
+              "type": "string"
+            },
+            "description": "The ID of the recipee"
           }
         ],
         "responses": {
@@ -596,17 +587,12 @@
         "parameters": [
           {
             "name": "ingredient_id",
-            "in": "body",
+            "in": "query",
             "required": true,
-            "description": "ID of the ingredient to be fetched.",
             "schema": {
-              "type": "object",
-              "properties": {
-                "ingredient_id": {
-                  "type": "string"
-                }
-              }
-            }
+              "type": "string"
+            },
+            "description": "The ID of the ingredient"
           }
         ],
         "responses": {
@@ -780,17 +766,12 @@
         "parameters": [
           {
             "name": "patient_id",
-            "in": "body",
+            "in": "query",
             "required": true,
-            "description": "ID of the patient.",
             "schema": {
-              "type": "object",
-              "properties": {
-                "patient_id": {
-                  "type": "string"
-                }
-              }
-            }
+              "type": "string"
+            },
+            "description": "The ID of the patient"
           }
         ],
         "responses": {
@@ -817,20 +798,15 @@
         "tags": ["Diet API"],
         "summary": "Fetch the last diet for a patient",
         "description": "Retrieve the most recent diet record for a given patient ID.",
-        "parameters": [
+        "parameters": [         
           {
             "name": "patient_id",
-            "in": "body",
+            "in": "query",
             "required": true,
-            "description": "ID of the patient.",
             "schema": {
-              "type": "object",
-              "properties": {
-                "patient_id": {
-                  "type": "string"
-                }
-              }
-            }
+              "type": "string"
+            },
+            "description": "The ID of the patient"
           }
         ],
         "responses": {
@@ -857,17 +833,12 @@
         "parameters": [
           {
             "name": "patient_ID",
-            "in": "body",
+            "in": "query",
             "required": true,
-            "description": "ID of the patient.",
             "schema": {
-              "type": "object",
-              "properties": {
-                "patient_ID": {
-                  "type": "string"
-                }
-              }
-            }
+              "type": "string"
+            },
+            "description": "The ID of the patient"
           }
         ],
         "responses": {
@@ -888,21 +859,16 @@
         "tags": ["LifeStyle API"],
         "summary": "Fetch lifestyle history for a patient",
         "description": "Retrieve all lifestyle records for a given patient ID.",
-        "parameters": [
+        "parameters": [          
           {
-            "name": "patient_ID",
-            "in": "body",
-            "required": true,
-            "description": "ID of the patient.",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "patient_ID": {
-                  "type": "string"
-                }
-              }
-            }
-          }
+          "name": "patient_ID",
+          "in": "query",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "description": "The ID of the patient"
+        }
         ],
         "responses": {
           "200": {
@@ -954,17 +920,12 @@
         "parameters": [
           {
             "name": "patient_ID",
-            "in": "body",
+            "in": "query",
             "required": true,
-            "description": "ID of the patient.",
             "schema": {
-              "type": "object",
-              "properties": {
-                "patient_ID": {
-                  "type": "string"
-                }
-              }
-            }
+              "type": "string"
+            },
+            "description": "The ID of the patient"
           }
         ],
         "responses": {
@@ -988,17 +949,12 @@
         "parameters": [
           {
             "name": "patient_ID",
-            "in": "body",
+            "in": "query",
             "required": true,
-            "description": "ID of the patient.",
             "schema": {
-              "type": "object",
-              "properties": {
-                "patient_ID": {
-                  "type": "string"
-                }
-              }
-            }
+              "type": "string"
+            },
+            "description": "The ID of the patient"
           }
         ],
         "responses": {
@@ -1051,17 +1007,12 @@
         "parameters": [
           {
             "name": "patient_ID",
-            "in": "body",
+            "in": "query",
             "required": true,
-            "description": "ID of the patient.",
             "schema": {
-              "type": "object",
-              "properties": {
-                "patient_ID": {
-                  "type": "string"
-                }
-              }
-            }
+              "type": "string"
+            },
+            "description": "The ID of the patient"
           }
         ],
         "responses": {
@@ -1085,17 +1036,12 @@
         "parameters": [
           {
             "name": "patient_ID",
-            "in": "body",
+            "in": "query",
             "required": true,
-            "description": "ID of the patient.",
             "schema": {
-              "type": "object",
-              "properties": {
-                "patient_ID": {
-                  "type": "string"
-                }
-              }
-            }
+              "type": "string"
+            },
+            "description": "The ID of the patient"
           }
         ],
         "responses": {
@@ -1148,17 +1094,12 @@
         "parameters": [
           {
             "name": "patient_ID",
-            "in": "body",
+            "in": "query",
             "required": true,
-            "description": "ID of the patient.",
             "schema": {
-              "type": "object",
-              "properties": {
-                "patient_ID": {
-                  "type": "string"
-                }
-              }
-            }
+              "type": "string"
+            },
+            "description": "The ID of the patient"
           }
         ],
         "responses": {
@@ -1182,17 +1123,12 @@
         "parameters": [
           {
             "name": "patient_ID",
-            "in": "body",
+            "in": "query",
             "required": true,
-            "description": "ID of the patient.",
             "schema": {
-              "type": "object",
-              "properties": {
-                "patient_ID": {
-                  "type": "string"
-                }
-              }
-            }
+              "type": "string"
+            },
+            "description": "The ID of the patient"
           }
         ],
         "responses": {
@@ -1241,24 +1177,26 @@
       "get": {
         "tags": ["Patient Static API"],
         "summary": "Authenticate and fetch patient data",
-        "parameters": [{
-          "in": "body",
-          "name": "body",
-          "required": true,
-          "schema": {
-            "type": "object",
-            "properties": {
-              "patient_email": {
-                "type": "string",
-                "description": "Email address of the patient."
-              },
-              "patient_pwd": {
-                "type": "string",
-                "description": "Password for the patient's account."
-              }
-            }
-          }
-        }],
+        "parameters": [
+          {
+            "name": "patient_email",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The patient_email"
+          },
+          {
+            "name": "patient_pwd",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The patient_pwd"
+          }      
+      ],
         "responses": {
           "200": {
             "description": "Patient data retrieved successfully.",
@@ -1276,20 +1214,17 @@
       "get": {
         "tags": ["Patient Static API"],
         "summary": "Fetch static information of a patient",
-        "parameters": [{
-          "in": "body",
-          "name": "body",
-          "required": true,
-          "schema": {
-            "type": "object",
-            "properties": {
-              "patient_ID": {
-                "type": "string",
-                "description": "ID of the patient."
-              }
-            }
+        "parameters": [
+          {
+            "name": "patient_ID",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The patient_ID"
           }
-        }],
+        ],
         "responses": {
           "200": {
             "description": "Patient static information retrieved successfully.",
@@ -1307,20 +1242,17 @@
       "get": {
         "tags": ["Patient Static API"],
         "summary": "Fetch all information of a patient",
-        "parameters": [{
-          "in": "body",
-          "name": "body",
-          "required": true,
-          "schema": {
-            "type": "object",
-            "properties": {
-              "patient_ID": {
-                "type": "string",
-                "description": "ID of the patient."
-              }
-            }
+        "parameters": [
+          {
+            "name": "patient_ID",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The patient_ID"
           }
-        }],
+        ],
         "responses": {
           "200": {
             "description": "All patient information retrieved successfully.",

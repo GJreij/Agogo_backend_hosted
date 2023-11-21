@@ -1,7 +1,7 @@
 1- CD to project_one
-2- env/bin/activate or /Desktop/AGOGO/dev/Project_One/env/bin/activate
+2- . env/bin/activate or /Desktop/AGOGO/dev/Project_One/env/bin/activate
 3- pip install Flask
-4- export FLASK_APP=Hello.py
+4- export FLASK_APP=app.py
 5- flask run
 5- FOR WINDOWS: python -m flask run
 

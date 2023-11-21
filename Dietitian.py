@@ -34,16 +34,16 @@ class Dietitian:
 
 # STATIC METHODS TO BE USED
     @staticmethod
-    def fetchDietitian(d_email,d_pwd):
+    def fetchDietitian(dietitian_ID):
         try:
-            if d_email == '' or d_pwd == '':
+            if dietitian_ID == '' :
                 response = {
                         "status": "error",
-                        "message": "Please enter a valid Email and Password"
+                        "message": "Please enter a dietitian_ID"
                     }            
                 return json.dumps(response)
             cur = Db_connection.getConnection().cursor()
-            cur.execute("select d.dietitian_id, d.first_name , d.family_name , to_char(d.date_of_birth, 'MM/DD/YYYY'), d.phone_number ,d.email from dietitian d where d.email = %s and d.pwd = %s",(d_email,d_pwd))
+            cur.execute("select d.dietitian_id, d.first_name , d.family_name , to_char(d.date_of_birth, 'MM/DD/YYYY'), d.phone_number ,d.email from dietitian d where d.dietitian_id = %s",(dietitian_ID,))
             dietitian = cur.fetchall()
             if cur.rowcount == 1 :
                 dietitianR = Dietitian(dietitian[0][0],dietitian[0][1],dietitian[0][2],dietitian[0][3],dietitian[0][4],dietitian[0][5])
@@ -53,7 +53,7 @@ class Dietitian:
                 cur.close();
                 result = {
                             "status": "error",
-                            "message": "The email or password is incorrect"
+                            "message": "The dietitian does not exist"
                         };
                 return result;
         except psycopg2.Error as e:
@@ -62,7 +62,15 @@ class Dietitian:
                         "message": "DB error: " + str(e)
                     }
             Db_connection.closeConnection(Db_connection.getConnection());              
-            return json.dumps(response)        
+            return json.dumps(response)     
+        except Exception as e:
+            response = {
+                        "status": "error",
+                        "message": "Server error: " + str(e)
+                    }
+            Db_connection.closeConnection(Db_connection.getConnection());              
+            return json.dumps(response) 
+
 
 
     @staticmethod
@@ -76,7 +84,7 @@ class Dietitian:
                 return json.dumps(response)
 
             cur = Db_connection.getConnection().cursor()
-            cur.execute("select p.patient_id ,p.first_name ,p.last_name ,p.gender ,to_char(p.date_of_birth, 'MM/DD/YYYY'),p.phone ,p.email ,p.address ,p.dietitian_id ,p.status  from patient_static_info p where p.dietitian_id = %s",(dietitian_ID))
+            cur.execute("select p.patient_id ,p.first_name ,p.last_name ,p.gender ,to_char(p.date_of_birth, 'MM/DD/YYYY'),p.phone ,p.email ,p.address ,p.dietitian_id ,p.status  from patient_static_info p where p.dietitian_id = %s",(dietitian_ID,))
             patients = cur.fetchall()
             jsonPatientsArray = [];
             for patient in patients:
@@ -91,7 +99,14 @@ class Dietitian:
                         "message": "DB error: " + str(e)
                     } 
             Db_connection.closeConnection(Db_connection.getConnection());             
-            return json.dumps(response)     
+            return json.dumps(response)    
+        except Exception as e:
+            response = {
+                        "status": "error",
+                        "message": "Server error: " + str(e)
+                    }
+            Db_connection.closeConnection(Db_connection.getConnection());              
+            return json.dumps(response)  
 
 
 #insert methods
@@ -133,6 +148,13 @@ class Dietitian:
                     }
             Db_connection.closeConnection(Db_connection.getConnection());            
             return json.dumps(response) 
+        except Exception as e:
+            response = {
+                        "status": "error",
+                        "message": "Server error: " + str(e)
+                    }
+            Db_connection.closeConnection(Db_connection.getConnection());              
+            return json.dumps(response) 
 
     
     @staticmethod
@@ -155,6 +177,13 @@ class Dietitian:
                         "message": "DB error: " + str(e)
                     }
             Db_connection.closeConnection(Db_connection.getConnection());            
+            return json.dumps(response) 
+        except Exception as e:
+            response = {
+                        "status": "error",
+                        "message": "Server error: " + str(e)
+                    }
+            Db_connection.closeConnection(Db_connection.getConnection());              
             return json.dumps(response) 
 
     @staticmethod
@@ -179,6 +208,13 @@ class Dietitian:
                         "message": "DB error: " + str(e)
                     }
             Db_connection.closeConnection(Db_connection.getConnection());            
+            return json.dumps(response) 
+        except Exception as e:
+            response = {
+                        "status": "error",
+                        "message": "Server error: " + str(e)
+                    }
+            Db_connection.closeConnection(Db_connection.getConnection());              
             return json.dumps(response) 
 
 
@@ -216,6 +252,13 @@ class Dietitian:
                         "message": "DB error: " + str(e)
                     }            
             return json.dumps(response)
+        except Exception as e:
+            response = {
+                        "status": "error",
+                        "message": "Server error: " + str(e)
+                    }
+            Db_connection.closeConnection(Db_connection.getConnection());              
+            return json.dumps(response) 
     
     
     
@@ -270,6 +313,13 @@ class Dietitian:
                         "message": "DB error: " + str(e)
                     }            
             return json.dumps(response)
+        except Exception as e:
+            response = {
+                        "status": "error",
+                        "message": "Server error: " + str(e)
+                    }
+            Db_connection.closeConnection(Db_connection.getConnection());              
+            return json.dumps(response) 
 
     @staticmethod
     def getDietitians():
@@ -301,6 +351,13 @@ class Dietitian:
                         "message": "DB error: " + str(e)
                     }            
             return json.dumps(response)
+        except Exception as e:
+            response = {
+                        "status": "error",
+                        "message": "Server error: " + str(e)
+                    }
+            Db_connection.closeConnection(Db_connection.getConnection());              
+            return json.dumps(response) 
 
 
     @staticmethod
@@ -344,3 +401,10 @@ class Dietitian:
                         "message": "DB error: " + str(e)
                     }            
             return json.dumps(response)
+        except Exception as e:
+            response = {
+                        "status": "error",
+                        "message": "Server error: " + str(e)
+                    }
+            Db_connection.closeConnection(Db_connection.getConnection());              
+            return json.dumps(response) 

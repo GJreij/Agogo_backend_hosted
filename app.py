@@ -35,8 +35,12 @@ def Close_Con():
 @app.get('/dietitian/login')
 def getDietitian():
     try:
-        data = request.get_json()
-        return Dietitian.fetchDietitian(data['dietitian_email'],data['dietitian_pwd']);
+        #data = request.get_json()
+        #dietitian_email = data['dietitian_email']
+        #dietitian_pwd = data['dietitian_pwd']
+        #dietitian_email = request.args.get("dietitian_email")
+        dietitian_ID = request.args.get("dietitian_ID")
+        return Dietitian.fetchDietitian(dietitian_ID);
     except:
          raise BadRequest('Something went wrong, please contact the system provider');
 
@@ -47,8 +51,10 @@ def getAllDietitians():
 @app.get('/dietitian/patients')
 def fetDietitianPatients():
     try:
-        data = request.get_json()
-        return Dietitian.fetchDietitianPatients(data['dietitian_ID']);
+        #data = request.get_json()
+        #dietitian_ID = data['dietitian_ID']
+        dietitian_ID = request.args.get("dietitian_ID")
+        return Dietitian.fetchDietitianPatients(dietitian_ID);
     except:
         raise BadRequest('Something went wrong, please contact the system provider');
 
@@ -90,36 +96,40 @@ def deleteDietitian():
 @app.get('/patient/login')
 def getPatient():
     try:
-        data = request.get_json()
-        return Patient.fetchPatient(data['patient_email'],data['patient_pwd']);
+        #data = request.get_json()
+        #patient_email = data['patient_email']
+        #patient_pwd = data['patient_pwd']
+        patient_email = request.args.get("patient_email")
+        patient_pwd = request.args.get("patient_pwd")
+        return Patient.fetchPatient(patient_email,patient_pwd);
     except:
         raise BadRequest('Something went wrong, please contact the system provider');
 
 @app.get('/patient/staticInfo')
 def getPatientStaticInfo():
     try:
-        data = request.get_json()
-        return Patient.fetchPatientStaticInfo(data['patient_ID']);
+        #data = request.get_json()
+        #patient_ID = data['patient_ID']
+        patient_ID = request.args.get("patient_ID")
+        return Patient.fetchPatientStaticInfo(patient_ID);
     except:
         raise BadRequest('Something went wrong, please contact the system provider');
 
 
 @app.get('/patient/LastAnthropometry')
 def getPatientLastAnthropometry():
-    #try:
-        data = request.get_json()
-        return Anthropometry.fetchPatientLastAnth(data['patient_ID']);
-  #  except:
-   #     raise BadRequest('Something went wrong, please contact the system provider');
-
+    #data = request.get_json()
+    #patient_ID = data['patient_ID']
+    patient_ID = request.args.get("patient_ID")
+    return Anthropometry.fetchPatientLastAnth(patient_ID);
+  
 
 @app.get('/patient/AnthropometryHistory')
 def getPatientAnthropometryHist():
-    #try:
-        data = request.get_json()
-        return Anthropometry.fetchPatientAnthHist(data['patient_ID']);
-  #  except:
-   #     raise BadRequest('Something went wrong, please contact the system provider');
+    #data = request.get_json()
+    #patient_ID = data['patient_ID']
+    patient_ID = request.args.get("patient_ID")
+    return Anthropometry.fetchPatientAnthHist(patient_ID);
 
 @app.post('/patient/addAnthropometry')
 def addAnthropometry():
@@ -128,65 +138,56 @@ def addAnthropometry():
 
 @app.get('/patient/LastBodyComp')
 def getPatientLastBodyComp():
-    #try:
-        data = request.get_json()
-        return BodyComp.fetchPatientLastBC(data['patient_ID']);
-  #  except:
-   #     raise BadRequest('Something went wrong, please contact the system provider');
-
+    #data = request.get_json()
+    #patient_ID = data['patient_ID']
+    patient_ID = request.args.get("patient_ID")
+    return BodyComp.fetchPatientLastBC(patient_ID);
 
 
 @app.get('/patient/BodyCompHistory')
 def getPatientBodyCompHist():
-    #try:
-        data = request.get_json()
-        return BodyComp.fetchPatientBCHist(data['patient_ID']);
-  #  except:
-   #     raise BadRequest('Something went wrong, please contact the system provider');
+    #data = request.get_json()
+    #patient_ID = data['patient_ID']
+    patient_ID = request.args.get("patient_ID")
+    return BodyComp.fetchPatientBCHist(patient_ID);
 
 @app.get('/patient/LastHealthHistory')
 def getPatientLastHealthHistory():
-    #try:
-        data = request.get_json()
-        return HealthHist.fetchPatientLastHealthHist(data['patient_ID']);
-  #  except:
-   #     raise BadRequest('Something went wrong, please contact the system provider');
+    #data = request.get_json()
+    #patient_ID = data['patient_ID']
+    patient_ID = request.args.get("patient_ID")
+    return HealthHist.fetchPatientLastHealthHist(patient_ID);
 
 
 @app.get('/patient/allHealthHistory')
-def getPatientAllHealthHistory():
-    #try:
-        data = request.get_json()
-        return HealthHist.fetchPatientAllHealthHist(data['patient_ID']);
-  #  except:
-   #     raise BadRequest('Something went wrong, please contact the system provider');
+def getPatientAllHealthHistory():    
+    #data = request.get_json()
+    #patient_ID = data['patient_ID']
+    patient_ID = request.args.get("patient_ID")
+    return HealthHist.fetchPatientAllHealthHist(patient_ID);
 
 @app.get('/patient/LastLifeStyle')
 def getPatientLastLifeStyle():
-    #try:
-        data = request.get_json()
-        return LifeStyle.fetchPatientLastLifeStyle(data['patient_ID']);
-  #  except:
-   #     raise BadRequest('Something went wrong, please contact the system provider');
+    #data = request.get_json()
+    #patient_ID = data['patient_ID']
+    patient_ID = request.args.get("patient_ID")
+    return LifeStyle.fetchPatientLastLifeStyle(patient_ID);
 
 
 @app.get('/patient/LifeStyleHistory')
 def getPatientLifeStyleHistory():
-    #try:
-        data = request.get_json()
-        return LifeStyle.fetchPatientLifeStyleHist(data['patient_ID']);
-  #  except:
-   #     raise BadRequest('Something went wrong, please contact the system provider');
+    #data = request.get_json()
+    #patient_ID = data['patient_ID']
+    patient_ID = request.args.get("patient_ID")
+    return LifeStyle.fetchPatientLifeStyleHist(patient_ID);
 
 
 @app.get('/patient/allInfo')
 def getPatientAllInfo():
-    #try:
-        data = request.get_json()
-        return Patient.fetchPatientAllInfo(data['patient_ID']);
-  #  except:
-   #     raise BadRequest('Something went wrong, please contact the system provider');
-
+    #data = request.get_json()
+    #patient_ID = data['patient_ID']
+    patient_ID = request.args.get("patient_ID")
+    return Patient.fetchPatientAllInfo(patient_ID);
 
 @app.delete('/patient/deletePatient')
 def deletePatient():
@@ -256,7 +257,7 @@ def generate_meal_plan_LSM():
     meal_plan = MealPrep.generate_meal_plan_LSM(data['dietitian_ID'], data['protein_goal'], data['carbs_goal'], data['fat_goal'], data['nbr_days'])
     return meal_plan
 # should it be get??
-@app.get('/MealPrep/generateMealPlanFixedLunch')
+@app.post('/MealPrep/generateMealPlanFixedLunch')
 def generate_meal_plan_fixed_lunch():
     data = request.get_json()
     meal_plan = MealPrep.generate_meal_plan_with_fixed_lunch(data['dietitian_ID'], data['protein_goal'], data['carbs_goal'], data['fat_goal'], data['nbr_days'], data['fixed_lunch_id'])
@@ -264,8 +265,12 @@ def generate_meal_plan_fixed_lunch():
 
 @app.get('/MealPrep/generateShoppingList')
 def generate_shopping_list():
-    data = request.get_json()
-    return MealPrep.generate_shopping_list(data['dietitian_ID'], data['recipee_id'])
+    #data = request.get_json()
+    #dietitian_ID = data['dietitian_ID']
+    #recipee_id = data['recipee_id']
+    dietitian_ID = request.args.get("dietitian_ID")
+    recipee_id = request.args.get("recipee_id")
+    return MealPrep.generate_shopping_list(dietitian_ID, recipee_id)
     
 
 @app.post('/MealPrep/insertMealPlanItem')
@@ -280,15 +285,23 @@ def insertBulkMPItems():
 
 @app.get('/MealPrep/getCombination')
 def getCombination():
-    data = request.get_json()
-    mpComb = MpCombination.getCombination(data['diet_id'], data['patient_id'],data['combination_id'])
+    #data = request.get_json()
+    #diet_id = data['diet_id']
+    #patient_id = data['patient_id']
+    #combination_id = data['combination_id']
+    diet_id = request.args.get("diet_id")
+    patient_id = request.args.get("patient_id")
+    combination_id = request.args.get("combination_id")
+    mpComb = MpCombination.getCombination(diet_id,patient_id,combination_id)
     return mpComb.mpCombination_json();
 
 ########################## Ingredient Class
 @app.get('/Ingredient/details')
 def getIngredientDetails():
-    data = request.get_json()
-    return Ingredient.fetchIngredientDetails(data['ingredient_id'])
+    #data = request.get_json()
+    #ingredient_id = data['ingredient_id']
+    ingredient_id = request.args.get("ingredient_id")
+    return Ingredient.fetchIngredientDetails(ingredient_id)
 
 @app.post('/Ingredient/addIngredient')
 def addIngredient():
@@ -302,16 +315,16 @@ def updateIngredient():
         ingredient_id = data.get('ingredient_id')
 
         if not ingredient_id:
-            return jsonify({'status': 'failed', 'message': 'Ingredient ID is required'}), 400
+            return jsonify({'status': 'error', 'message': 'Ingredient ID is required'}), 400
 
         result = Ingredient.updateIngredient(ingredient_id, data)
         return jsonify({'status': 'success', 'message': result}), 200
 
     except ValueError as ve:
-        return jsonify({'status': 'failed', 'message': str(ve)}), 400
+        return jsonify({'status': 'error', 'message': str(ve)}), 400
     except Exception as e:
         app.logger.error(f"Exception occurred: {e}")
-        return jsonify({'status': 'failed', 'message': 'Something went wrong'}), 500    
+        return jsonify({'status': 'error', 'message': 'Something went wrong'}), 500    
 
 
 ########################## Diet Class
@@ -329,16 +342,16 @@ def updateDiet():
         diet_id = data.get('diet_id')
 
         if not diet_id:
-            return jsonify({'status': 'failed', 'message': 'Diet ID is required'}), 400
+            return jsonify({'status': 'error', 'message': 'Diet ID is required'}), 400
 
         result = Diet.updateDiet(diet_id, data)
         return jsonify({'status': 'success', 'message': result}), 200
 
     except ValueError as ve:
-        return jsonify({'status': 'failed', 'message': str(ve)}), 400
+        return jsonify({'status': 'error', 'message': str(ve)}), 400
     except Exception as e:
         app.logger.error(f"Exception occurred: {e}")
-        return jsonify({'status': 'failed', 'message': 'Something went wrong'}), 500     
+        return jsonify({'status': 'error', 'message': 'Something went wrong'}), 500     
 
 @app.delete('/Diet/deleteDiet')
 def deleteDiet():
@@ -347,43 +360,44 @@ def deleteDiet():
         diet_id = data.get('diet_id')
 
         if not diet_id:
-            return jsonify({'status': 'failed', 'message': 'Diet ID is required'}), 400
+            return jsonify({'status': 'error', 'message': 'Diet ID is required'}), 400
 
         result = Diet.deleteDiet(diet_id)
         return jsonify({'status': 'success', 'message': result}), 200
 
     except ValueError as ve:
-        return jsonify({'status': 'failed', 'message': str(ve)}), 400
+        return jsonify({'status': 'error', 'message': str(ve)}), 400
     except Exception as e:
         app.logger.error(f"Exception occurred: {e}")
-        return jsonify({'status': 'failed', 'message': 'Something went wrong'}), 500  
+        return jsonify({'status': 'error', 'message': 'Something went wrong'}), 500  
 
 @app.get('/Diet/getDietHistory')
 def getDietHistory():
     try:
-        data = request.get_json()
-        patient_id = data.get('patient_id')
-
+        #data = request.get_json()
+        #patient_id = data.get('patient_id')
+        patient_id = request.args.get("patient_id")
         if not patient_id:
-            return jsonify({'status': 'failed', 'message': 'Patient ID is required'}), 400
+            return jsonify({'status': 'error', 'message': 'Patient ID is required'}), 400
 
         diets = Diet.getDietHistory(patient_id)
         return jsonify({'status': 'success', 'data': diets}), 200
 
     except ValueError as ve:
-        return jsonify({'status': 'failed', 'message': str(ve)}), 400
+        return jsonify({'status': 'error', 'message': str(ve)}), 400
     except Exception as e:
         app.logger.error(f"Exception occurred: {e}")
-        return jsonify({'status': 'failed', 'message': 'Something went wrong'}), 500
+        return jsonify({'status': 'error', 'message': 'Something went wrong'}), 500
 
 @app.get('/Diet/getLastDiet')
 def getLastDiet():
     try:
-        data = request.get_json()
-        patient_id = data.get('patient_id')
+        #data = request.get_json()
+        #patient_id = data.get('patient_id')
+        patient_id = request.args.get("patient_id")
 
         if not patient_id:
-            return jsonify({'status': 'failed', 'message': 'Patient ID is required'}), 400
+            return jsonify({'status': 'error', 'message': 'Patient ID is required'}), 400
 
         diet = Diet.getLastDiet(patient_id)
         
@@ -393,15 +407,19 @@ def getLastDiet():
         return jsonify({'status': 'success', 'data': diet}), 200
 
     except ValueError as ve:
-        return jsonify({'status': 'failed', 'message': str(ve)}), 400
+        return jsonify({'status': 'error', 'message': str(ve)}), 400
     except Exception as e:
         app.logger.error(f"Exception occurred: {e}")
-        return jsonify({'status': 'failed', 'message': 'Something went wrong'}), 500
+        return jsonify({'status': 'error', 'message': 'Something went wrong'}), 500
 
 @app.get('/diet/getDietCombinations')
 def getDietCombinations():
-    data = request.get_json()
-    mpCombs = Diet.getDietCombinations(data['diet_id'], data['patient_id'])
+    #data = request.get_json()
+    #patient_id = data.get('patient_id')
+    #diet_id = data['diet_id']
+    patient_id = request.args.get("patient_id")
+    diet_id = request.args.get("diet_id")
+    mpCombs = Diet.getDietCombinations(diet_id, patient_id)
     return mpCombs;
 
 ############################ Recipee Class
@@ -409,11 +427,12 @@ def getDietCombinations():
 @app.get('/Recipee/getRecipee')
 def getRecipeeByID():
     try:
-        data = request.get_json()
-        recipee_id = data.get('recipee_id')
+        #data = request.get_json()
+        #recipee_id = data.get('recipee_id')
+        recipee_id = request.args.get("recipee_id")
 
         if not recipee_id:
-            return jsonify({'status': 'failed', 'message': 'recipee_id is required'}), 400
+            return jsonify({'status': 'error', 'message': 'recipee_id is required'}), 400
 
         recipee = Recipee.getRecipee(recipee_id)
         
@@ -423,10 +442,10 @@ def getRecipeeByID():
         return recipee, 200
 
     except ValueError as ve:
-        return jsonify({'status': 'failed', 'message': str(ve)}), 400
+        return jsonify({'status': 'error', 'message': str(ve)}), 400
     except Exception as e:
         app.logger.error(f"Exception occurred: {e}")
-        return jsonify({'status': 'failed', 'message': 'Something went wrong'}), 500
+        return jsonify({'status': 'error', 'message': 'Something went wrong'}), 500
 
 
 
