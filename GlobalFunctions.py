@@ -49,6 +49,7 @@ class GlobalFunctions:
     def cleanJSON(json_obj):
         json_obj = json.dumps(json_obj)
         json_obj = json_obj.replace(r'"{\\', '{').replace('\\', '').replace('}"','}').replace('"{', '{')
+        json_obj = json_obj.replace('}"','}')
         return json_obj
     
     @staticmethod
