@@ -53,8 +53,9 @@ class Anthropometry:
                 return GlobalFunctions.return_error_msg("Patient hs no Anthropometry info")            
 
             lastAnth = Anthropometry(anths[0][0],anths[0][1],anths[0][2],anths[0][3],anths[0][4],anths[0][5],anths[0][6],anths[0][7],anths[0][8],anths[0][9],anths[0][10],anths[0][11],anths[0][12])
-            to_ret = json.dumps(lastAnth.Anthropometry_json());
-            return GlobalFunctions.cleanJSON(to_ret)
+            #to_ret = json.dumps(lastAnth.Anthropometry_json());
+         
+            return GlobalFunctions.return_success_msg(lastAnth.Anthropometry_json())
         
         except psycopg2.Error as e:
             Db_connection.closeConnection(Db_connection.getConnection());

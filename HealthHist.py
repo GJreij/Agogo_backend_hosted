@@ -55,7 +55,9 @@ class HealthHist:
                 return GlobalFunctions.return_error_msg("Patient has no Health History info")
               
             lastHealthH = HealthHist(healthhists[0][0],healthhists[0][1],healthhists[0][2],healthhists[0][3],healthhists[0][4],healthhists[0][5],healthhists[0][6],healthhists[0][7],healthhists[0][8],healthhists[0][9],healthhists[0][10],healthhists[0][11],healthhists[0][12],healthhists[0][13])
-            return lastHealthH.HealthHist_json();
+         
+            return GlobalFunctions.return_success_msg(lastHealthH.HealthHist_json());
+             
 
         except psycopg2.Error as e:
             Db_connection.closeConnection(Db_connection.getConnection());

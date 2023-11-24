@@ -113,3 +113,11 @@ class GlobalFunctions:
                         "message": error_msg
                     }            
         return json.dumps(response)
+    
+    @staticmethod
+    def return_success_msg(msg):
+        response = {
+                        "status": "success",
+                        "message": msg
+                    }            
+        return GlobalFunctions.cleanJSON(response)

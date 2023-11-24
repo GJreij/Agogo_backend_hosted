@@ -59,7 +59,7 @@ class LifeStyle:
                 return GlobalFunctions.return_error_msg("Patient hs no Life Style info")
                 
             lastLifeStyle = LifeStyle(lifeStylehists[0][0],lifeStylehists[0][1],lifeStylehists[0][2],lifeStylehists[0][3],lifeStylehists[0][4],lifeStylehists[0][5],lifeStylehists[0][6],lifeStylehists[0][7],lifeStylehists[0][8],lifeStylehists[0][9],lifeStylehists[0][10],lifeStylehists[0][11])
-            return lastLifeStyle.LifeStyle_json();
+            return GlobalFunctions.return_success_msg(lastLifeStyle.LifeStyle_json());
        
         except psycopg2.Error as e:
             Db_connection.closeConnection(Db_connection.getConnection());

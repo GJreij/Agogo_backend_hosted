@@ -45,7 +45,8 @@ class BodyComp:
                 return GlobalFunctions.return_error_msg("Patient hs no Body Composition info")
             
             lastBC = BodyComp(boCos[0][0],boCos[0][1],boCos[0][2],boCos[0][3],boCos[0][4],boCos[0][5],boCos[0][6])
-            return lastBC.BodyComp_json();
+          
+            return GlobalFunctions.return_success_msg(lastBC.BodyComp_json());
     
         except psycopg2.Error as e:
             Db_connection.closeConnection(Db_connection.getConnection());
