@@ -21,8 +21,7 @@ class MpCombination:
                         "dinner": self.dinner.recipee_json(),
                         "score": self.score
                                 }
-        
-        return GlobalFunctions.cleanJSON(json.dumps(combination))
+        return combination
     
     def get_breakfast(self):
         return self.breakfast

@@ -90,7 +90,12 @@ class MealPrep:
         
         if err_msg != None:
             return GlobalFunctions.return_error_msg(err_msg)
-        
+        dietitian_ID = int(dietitian_ID)
+        protein_goal = int(protein_goal)
+        carbs_goal = int(carbs_goal)
+        fat_goal = int(fat_goal)
+        nbr_days = int(nbr_days)
+
         try:
             cur = Db_connection.getConnection().cursor()
             # Fetch all meals
@@ -131,9 +136,13 @@ class MealPrep:
                                     # combJson = combination.mpCombination_json()
                                     # print(combJson)
                                     # all_combinations = all_combinations.append(combJson);
-    
+
             # Sort the combinations based on LSM score in ascending order
+
+            print("before sort")
+            print(all_combinations)
             all_combinations.sort(key=lambda x: x["score"])
+            print("After sort")
             nbr_days = int(nbr_days)
             best_combinations = all_combinations[:nbr_days]
             cur.close()
@@ -165,6 +174,13 @@ class MealPrep:
         
         if err_msg != None:
             return GlobalFunctions.return_error_msg(err_msg)
+        
+        dietitian_ID = int(dietitian_ID)
+        protein_goal = int(protein_goal)
+        carbs_goal = int(carbs_goal)
+        fat_goal = int(fat_goal)
+        nbr_days = int(nbr_days)
+        fixed_lunch_id = int(fixed_lunch_id)
 
         try:
             cur = Db_connection.getConnection().cursor()
