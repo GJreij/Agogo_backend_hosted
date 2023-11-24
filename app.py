@@ -34,30 +34,24 @@ def Close_Con():
 #DIETITIAN CLASS
 @app.get('/dietitian/login')
 def getDietitian():
-    try:
-        #data = request.get_json()
-        #dietitian_email = data['dietitian_email']
-        #dietitian_pwd = data['dietitian_pwd']
-        #dietitian_email = request.args.get("dietitian_email")
-        dietitian_ID = request.args.get("dietitian_ID")
-        return Dietitian.fetchDietitian(dietitian_ID);
-    except:
-         raise BadRequest('Something went wrong, please contact the system provider');
-
+    #data = request.get_json()
+    #dietitian_email = data['dietitian_email']
+    #dietitian_pwd = data['dietitian_pwd']
+    #dietitian_email = request.args.get("dietitian_email")
+    dietitian_ID = request.args.get("dietitian_ID")
+    return Dietitian.fetchDietitian(dietitian_ID);
+    
 @app.get('/dietitian/getDietitians')
 def getAllDietitians():
     return Dietitian.getDietitians();
 
 @app.get('/dietitian/patients')
 def fetDietitianPatients():
-    try:
-        #data = request.get_json()
-        #dietitian_ID = data['dietitian_ID']
-        dietitian_ID = request.args.get("dietitian_ID")
-        return Dietitian.fetchDietitianPatients(dietitian_ID);
-    except:
-        raise BadRequest('Something went wrong, please contact the system provider');
-
+    #data = request.get_json()
+    #dietitian_ID = data['dietitian_ID']
+    dietitian_ID = request.args.get("dietitian_ID")
+    return Dietitian.fetchDietitianPatients(dietitian_ID);
+    
 
 @app.post('/dietitian/createPatient')
 def setPatient():
@@ -95,26 +89,20 @@ def deleteDietitian():
 #PATIENT CLASS
 @app.get('/patient/login')
 def getPatient():
-    try:
-        #data = request.get_json()
-        #patient_email = data['patient_email']
-        #patient_pwd = data['patient_pwd']
-        patient_email = request.args.get("patient_email")
-        patient_pwd = request.args.get("patient_pwd")
-        return Patient.fetchPatient(patient_email,patient_pwd);
-    except:
-        raise BadRequest('Something went wrong, please contact the system provider');
-
+    #data = request.get_json()
+    #patient_email = data['patient_email']
+    #patient_pwd = data['patient_pwd']
+    patient_email = request.args.get("patient_email")
+    patient_pwd = request.args.get("patient_pwd")
+    return Patient.fetchPatient(patient_email,patient_pwd);
+    
 @app.get('/patient/staticInfo')
 def getPatientStaticInfo():
-    try:
-        #data = request.get_json()
-        #patient_ID = data['patient_ID']
-        patient_ID = request.args.get("patient_ID")
-        return Patient.fetchPatientStaticInfo(patient_ID);
-    except:
-        raise BadRequest('Something went wrong, please contact the system provider');
-
+    #data = request.get_json()
+    #patient_ID = data['patient_ID']
+    patient_ID = request.args.get("patient_ID")
+    return Patient.fetchPatientStaticInfo(patient_ID);
+    
 
 @app.get('/patient/LastAnthropometry')
 def getPatientLastAnthropometry():
@@ -295,6 +283,8 @@ def getCombination():
     mpComb = MpCombination.getCombination(diet_id,patient_id,combination_id)
     return mpComb.mpCombination_json();
 
+
+#HERE
 ########################## Ingredient Class
 @app.get('/Ingredient/details')
 def getIngredientDetails():

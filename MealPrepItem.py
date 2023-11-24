@@ -49,54 +49,65 @@ class MealPrepItem:
 
     @staticmethod
     def addMealPrepItem(mpItemJSON):
-        mpItem = json.loads(mpItemJSON)
-        pk_check = MealPrepItem.mpItem_PK_check(mpItem)
-        if pk_check != "ok":
-            return pk_check
-       
-
-        cur = Db_connection.getConnection().cursor()
-        
         try:
+            mpItem = json.loads(mpItemJSON)
+            pk_check = MealPrepItem.mpItem_PK_check(mpItem)
+            if pk_check != "ok":
+                return GlobalFunctions.return_error_msg(pk_check)
+        
+            cur = Db_connection.getConnection().cursor()
+        
+        
             insert_query = """INSERT INTO public.meal_prep (diet_id, recipee_id, date, meal_type, servings, patient_id, diet_start_date, combinationnbr) 
-            VALUES(%s, %s, TO_DATE(%s,'DD/MM/YYYY'), %s, %s, %s, TO_DATE(%s,'DD/MM/YYYY'), %s);"""
+            VALUES(%s, %s, TO_DATE(%s,'YYYY-MM-DD'), %s, %s, %s, TO_DATE(%s,'YYYY-MM-DD'), %s);"""
             
-            cur.execute(insert_query, (mpItem["diet_id"], mpItem["recipee_id"], mpItem["date"], mpItem["meal_type"], mpItem["servings"],
-                                        mpItem["patient_id"], mpItem["diet_start_date"], mpItem["combinationnbr"]))
+            cur.execute(insert_query, (mpItem["diet_id"], mpItem["recipee_id"], 
+                                    GlobalFunctions.convert_date_to_DB_yyyy_mm_dd(mpItem["date"]),
+                                      mpItem["meal_type"], mpItem["servings"],mpItem["patient_id"], 
+                                      GlobalFunctions.convert_date_to_DB_yyyy_mm_dd(mpItem["diet_start_date"]),
+                                          mpItem["combinationnbr"]))
                         
             # Commit the transaction
             Db_connection.commit()
             
             # Close the cursor
             cur.close()
-            
-            return f"meal prep item added successfully"
+            response = {
+                        "status": "success",
+                        "message": "Meal Prep Item inserted successfully"
+                    }            
+            return json.dumps(response)
             
         except psycopg2.Error as e:
-            return f"Database error: {e}"
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("DB error: " + str(e))
+        except Exception as e:
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("Server error: " + str(e))   
         
 
 
     @staticmethod
     def addbulkMealPrepItems(mpItemsJson):
-        insert_query = """INSERT INTO public.meal_prep (diet_id, recipee_id, date, meal_type, servings, patient_id, diet_start_date, combinationnbr) VALUES """
-        comma = 'n'
-        mpItemsJson = json.loads(mpItemsJson)
-        
-        for mpItem in mpItemsJson:
-            mpItem = json.loads(json.dumps(mpItem))
-            print(mpItem)
-            pk_check = MealPrepItem.mpItem_PK_check(mpItem)
-            if pk_check != "ok":
-                return pk_check
-            if comma == 'y':
-                insert_query = insert_query+','
-            insert_query =insert_query+ "('"+mpItem["diet_id"]+"', '"+mpItem["recipee_id"]+"', TO_DATE('"+mpItem["date"]+"','DD/MM/YYYY'),'"+ mpItem["meal_type"]+"', '"+mpItem["servings"]+"', '"+mpItem["patient_id"]+"', TO_DATE('"+ mpItem["diet_start_date"]+"','DD/MM/YYYY'),'" +mpItem["combinationnbr"]+"')"
-            comma = 'y';
-        print(insert_query)
-        cur = Db_connection.getConnection().cursor()
-        
         try:
+            insert_query = """INSERT INTO public.meal_prep (diet_id, recipee_id, date, meal_type, servings, patient_id, diet_start_date, combinationnbr) VALUES """
+            comma = 'n'
+            mpItemsJson = json.loads(mpItemsJson)
+            
+            for mpItem in mpItemsJson:
+                mpItem = json.loads(json.dumps(mpItem))
+                print(mpItem)
+                pk_check = MealPrepItem.mpItem_PK_check(mpItem)
+                if pk_check != "ok":
+                    return GlobalFunctions.return_error_msg(pk_check)
+                
+                if comma == 'y':
+                    insert_query = insert_query+','
+                insert_query =insert_query+ "('"+mpItem["diet_id"]+"', '"+mpItem["recipee_id"]+"', TO_DATE('"+GlobalFunctions.convert_date_to_DB_yyyy_mm_dd(mpItem["date"])+"','YYYY-MM-DD'),'"+ mpItem["meal_type"]+"', '"+mpItem["servings"]+"', '"+mpItem["patient_id"]+"', TO_DATE('"+GlobalFunctions.convert_date_to_DB_yyyy_mm_dd(mpItem["diet_start_date"])+"','YYYY-MM-DD'),'" +mpItem["combinationnbr"]+"')"
+                comma = 'y';
+            print(insert_query)
+            cur = Db_connection.getConnection().cursor()
+        
             cur.execute(insert_query)
           # Commit the transaction
             Db_connection.commit()
@@ -104,9 +115,17 @@ class MealPrepItem:
             # Close the cursor
             cur.close()
             
-            return f"meal prep items added successfully"
-            
+            response = {
+                        "status": "success",
+                        "message": "meal prep items added successfully"
+                    }            
+            return json.dumps(response)
+        
         except psycopg2.Error as e:
-            return f"Database error: {e}"
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("DB error: " + str(e))
+        except Exception as e:
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("Server error: " + str(e))   
         
         

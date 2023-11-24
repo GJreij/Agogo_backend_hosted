@@ -103,3 +103,12 @@ class GlobalFunctions:
             
         # If none of the formats match, return an error message or handle as needed
         return "Invalid date format"
+    
+
+    @staticmethod
+    def return_error_msg(error_msg):
+        response = {
+                        "status": "error",
+                        "message": error_msg
+                    }            
+        return json.dumps(response)

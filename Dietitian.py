@@ -36,12 +36,9 @@ class Dietitian:
     @staticmethod
     def fetchDietitian(dietitian_ID):
         try:
-            if dietitian_ID == '' :
-                response = {
-                        "status": "error",
-                        "message": "Please enter a dietitian_ID"
-                    }            
-                return json.dumps(response)
+            if dietitian_ID == '' or not dietitian_ID.isnumeric():
+                return GlobalFunctions.return_error_msg("Please enter a valid dietitian_ID")
+
             cur = Db_connection.getConnection().cursor()
             cur.execute("select d.dietitian_id, d.first_name , d.family_name , to_char(d.date_of_birth, 'MM/DD/YYYY'), d.phone_number ,d.email from dietitian d where d.dietitian_id = %s",(dietitian_ID,))
             dietitian = cur.fetchall()
@@ -51,38 +48,23 @@ class Dietitian:
                 return dietitianR.dietitian_json();
             else :
                 cur.close();
-                result = {
-                            "status": "error",
-                            "message": "The dietitian does not exist"
-                        };
-                return result;
+                return GlobalFunctions.return_error_msg("The dietitian does not exist")
+
         except psycopg2.Error as e:
-            response = {
-                        "status": "error",
-                        "message": "DB error: " + str(e)
-                    }
-            Db_connection.closeConnection(Db_connection.getConnection());              
-            return json.dumps(response)     
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("DB error: " + str(e))
         except Exception as e:
-            response = {
-                        "status": "error",
-                        "message": "Server error: " + str(e)
-                    }
-            Db_connection.closeConnection(Db_connection.getConnection());              
-            return json.dumps(response) 
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("Server error: " + str(e))
 
 
 
     @staticmethod
     def fetchDietitianPatients(dietitian_ID):
         try:
-            if dietitian_ID == '':
-                response = {
-                        "status": "error",
-                        "message": "Please enter a dietitian_ID"
-                    }            
-                return json.dumps(response)
-
+            if dietitian_ID == '' or not dietitian_ID.isnumeric():
+                return GlobalFunctions.return_error_msg("Please enter a valid dietitian_ID")
+            
             cur = Db_connection.getConnection().cursor()
             cur.execute("select p.patient_id ,p.first_name ,p.last_name ,p.gender ,to_char(p.date_of_birth, 'MM/DD/YYYY'),p.phone ,p.email ,p.address ,p.dietitian_id ,p.status  from patient_static_info p where p.dietitian_id = %s",(dietitian_ID,))
             patients = cur.fetchall()
@@ -94,19 +76,11 @@ class Dietitian:
             return GlobalFunctions.cleanJSON(jsonPatientsArray);
 
         except psycopg2.Error as e:
-            response = {
-                        "status": "error",
-                        "message": "DB error: " + str(e)
-                    } 
-            Db_connection.closeConnection(Db_connection.getConnection());             
-            return json.dumps(response)    
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("DB error: " + str(e))
         except Exception as e:
-            response = {
-                        "status": "error",
-                        "message": "Server error: " + str(e)
-                    }
-            Db_connection.closeConnection(Db_connection.getConnection());              
-            return json.dumps(response)  
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("Server error: " + str(e))
 
 
 #insert methods
@@ -114,19 +88,16 @@ class Dietitian:
     def createPatient(patientJSON):
         try:
             patientData = json.loads(patientJSON)
-            if patientData['dietitian_id'] == '' :
-                response = {
-                        "status": "error",
-                        "message": "Please enter a dietitian_ID"
-                    }            
-                return json.dumps(response)
-            
+            dietitian_ID = patientData['dietitian_id']
+            error_msg = None
+            if patientData['dietitian_id'] == '' or not dietitian_ID.isnumeric():
+                error_msg = "Please enter a valid dietitian_ID"
             if patientData['pwd'] =='' :
-                response = {
-                        "status": "error",
-                        "message": "Please set a temporary password for the client"
-                    }            
-                return json.dumps(response)
+                error_msg = "Please set a temporary password for the client"
+            #return if error
+            if error_msg != None:
+                return GlobalFunctions.return_error_msg(error_msg)
+
             cur = Db_connection.getConnection().cursor()
             cur.execute("INSERT INTO public.patient_static_info (first_name, last_name, gender, date_of_birth, phone, email, address, dietitian_id, pwd, status) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING patient_id"
                         ,(patientData['first_name'], patientData['last_name'], patientData['gender'],
@@ -141,100 +112,79 @@ class Dietitian:
                             patientData['phone'], patientData['email'], patientData['address'], patientData['dietitian_id'],'ACTIVE')
             
             return patientR.Patient_json();
+
         except psycopg2.Error as e:
-            response = {
-                        "status": "error",
-                        "message": "DB error: " + str(e)
-                    }
-            Db_connection.closeConnection(Db_connection.getConnection());            
-            return json.dumps(response) 
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("DB error: " + str(e))
         except Exception as e:
-            response = {
-                        "status": "error",
-                        "message": "Server error: " + str(e)
-                    }
-            Db_connection.closeConnection(Db_connection.getConnection());              
-            return json.dumps(response) 
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("Server error: " + str(e))
 
     
     @staticmethod
     def deactivatePatient(patient_ID):
         try:
-            if patient_ID == '' :
-                response = {
-                        "status": "error",
-                        "message": "Please set a temporary password for the client"
-                    }            
-                return json.dumps(response)
+            if patient_ID == '' or not patient_ID.isnumeric():
+                return GlobalFunctions.return_error_msg("Please enter a valid Patient ID")
+               
             cur = Db_connection.getConnection().cursor()
             cur.execute("UPDATE patient_static_info SET status= %s WHERE patient_id= %s",("UNACTIVE",patient_ID));
             Db_connection.commit();
             cur.close();
-            return patient_ID
+            msg_succes= "Patient "+ patient_ID + " Deactivated successfully"
+            response = {
+                        "status": "success",
+                        "message": msg_succes
+                    }
+            return response
+        
         except psycopg2.Error as e:
-            response = {
-                        "status": "error",
-                        "message": "DB error: " + str(e)
-                    }
-            Db_connection.closeConnection(Db_connection.getConnection());            
-            return json.dumps(response) 
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("DB error: " + str(e))
         except Exception as e:
-            response = {
-                        "status": "error",
-                        "message": "Server error: " + str(e)
-                    }
-            Db_connection.closeConnection(Db_connection.getConnection());              
-            return json.dumps(response) 
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("Server error: " + str(e))        
 
     @staticmethod
     def activatePatient(patient_ID):
         try:
-            if patient_ID == '' :
-                response = {
-                        "status": "error",
-                        "message": "Please add a patient ID"
-                    }            
-                return json.dumps(response)
+            if patient_ID == '' or not patient_ID.isnumeric():
+                return GlobalFunctions.return_error_msg("Please enter a valid Patient ID")
             
             cur = Db_connection.getConnection().cursor()
             cur.execute("UPDATE patient_static_info SET status= %s WHERE patient_id= %s",("ACTIVE",patient_ID));
             Db_connection.commit();
             cur.close();
-            return patient_ID
-    
+            msg_succes= "Patient "+ patient_ID + " Activated successfully"
+            response = {
+                        "status": "success",
+                        "message": msg_succes
+                    }
+            return response    
+        
         except psycopg2.Error as e:
-            response = {
-                        "status": "error",
-                        "message": "DB error: " + str(e)
-                    }
-            Db_connection.closeConnection(Db_connection.getConnection());            
-            return json.dumps(response) 
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("DB error: " + str(e))
         except Exception as e:
-            response = {
-                        "status": "error",
-                        "message": "Server error: " + str(e)
-                    }
-            Db_connection.closeConnection(Db_connection.getConnection());              
-            return json.dumps(response) 
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("Server error: " + str(e))
 
 
     
     @staticmethod
     def addDietitian(dietitianData):
         dietitianData = json.loads(dietitianData)
-        
         try:
+            if dietitian_id['email'] == '':
+                return GlobalFunctions.return_error_msg("Dietitian Email is a mandatory field")
+            
             cur = Db_connection.getConnection().cursor()
             query = 'INSERT INTO dietitian ' + GlobalFunctions.buildInsertQuery(dietitianData) + ' RETURNING dietitian_id' 
-            print(query)
-            
             cur.execute(query)
             # Commit the transaction
             Db_connection.commit()
-            
             # Fetch the automatically generated ingredient_id
             dietitian_id = cur.fetchone()[0]
-            
             # Close the cursor
             cur.close();
             response = {
@@ -244,21 +194,13 @@ class Dietitian:
                     }
 
             return json.dumps(response)
-            
+        
         except psycopg2.Error as e:
             Db_connection.closeConnection(Db_connection.getConnection());
-            response = {
-                        "status": "error",
-                        "message": "DB error: " + str(e)
-                    }            
-            return json.dumps(response)
+            return GlobalFunctions.return_error_msg("DB error: " + str(e))
         except Exception as e:
-            response = {
-                        "status": "error",
-                        "message": "Server error: " + str(e)
-                    }
-            Db_connection.closeConnection(Db_connection.getConnection());              
-            return json.dumps(response) 
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("Server error: " + str(e))
     
     
     
@@ -266,21 +208,16 @@ class Dietitian:
     def updateDietitian(updated_data):
         updated_data = json.loads(updated_data)
         dietitian_id = updated_data['dietitian_id']
+        error_msg = None
         try:
             if 'dietitian_id' in updated_data:
-                if updated_data['dietitian_id'] == '':
-                    response = {
-                        "status": "error",
-                        "message": "dietitian_id is missing"
-                    }            
-                    return json.dumps(response)
+                if updated_data['dietitian_id'] == '' or not dietitian_id.isnumeric():
+                    error_msg = "dietitian_id is missing"
             else:
-                response = {
-                        "status": "error",
-                        "message": "dietitian_id is missing"
-                    }            
-                return json.dumps(response) 
-                
+                error_msg = "dietitian_id is missing"
+            if error_msg != None:
+                return GlobalFunctions.return_error_msg(error_msg)
+
             cur = Db_connection.getConnection().cursor()
             update_query = 'UPDATE dietitian SET ' + GlobalFunctions.buildUpdateQuery(updated_data) 
             update_query = update_query + "WHERE dietitian_id = '" + str(dietitian_id) + "'"
@@ -291,36 +228,21 @@ class Dietitian:
             Db_connection.commit()
             cur.close()
             
-            if cur.rowcount:
-                response = {
+            response = {
                         "status": "success",
                         "message": "Operation completed successfully.",
                         "dietitian_id" : dietitian_id
                     }
-                return json.dumps(response)
-            else:
-                response = {
-                        "status": "success",
-                        "message": "Operation completed successfully.",
-                        "dietitian_id" : dietitian_id
-                    }
-                return json.dumps(response)
+            return json.dumps(response)
     
         except psycopg2.Error as e:
             Db_connection.closeConnection(Db_connection.getConnection());
-            response = {
-                        "status": "error",
-                        "message": "DB error: " + str(e)
-                    }            
-            return json.dumps(response)
+            return GlobalFunctions.return_error_msg("DB error: " + str(e))
         except Exception as e:
-            response = {
-                        "status": "error",
-                        "message": "Server error: " + str(e)
-                    }
-            Db_connection.closeConnection(Db_connection.getConnection());              
-            return json.dumps(response) 
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("Server error: " + str(e))
 
+#HERE
     @staticmethod
     def getDietitians():
         try:                
@@ -343,32 +265,19 @@ class Dietitian:
             # jsonDietitiansArray = json.dumps(jsonDietitiansArray)
             # jsonDietitiansArray = jsonDietitiansArray.replace(r'"{\\', '{').replace('\\', '').replace('}"','}').replace('"{', '{')
             return jsonDietitiansArray;
-
+    
         except psycopg2.Error as e:
             Db_connection.closeConnection(Db_connection.getConnection());
-            response = {
-                        "status": "error",
-                        "message": "DB error: " + str(e)
-                    }            
-            return json.dumps(response)
+            return GlobalFunctions.return_error_msg("DB error: " + str(e))
         except Exception as e:
-            response = {
-                        "status": "error",
-                        "message": "Server error: " + str(e)
-                    }
-            Db_connection.closeConnection(Db_connection.getConnection());              
-            return json.dumps(response) 
-
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("Server error: " + str(e))
 
     @staticmethod
     def removeDietitian(dietitian_id):
         try:
             if dietitian_id  == '':
-                response = {
-                        "status": "error",
-                        "message": "dietitian_id is missing"
-                    }            
-                return json.dumps(response) 
+                return GlobalFunctions.return_error_msg("dietitian_id is missing")
                 
             cur = Db_connection.getConnection().cursor()
             query = "DELETE FROM dietitian WHERE dietitian_id = %s"
@@ -387,24 +296,12 @@ class Dietitian:
                     }
                 return json.dumps(response) 
             else:
-                response = {
-                        "status": "error",
-                        "message": "Dietitian not found",
-                        "dietitian_id" : dietitian_id
-                    }
-                return json.dumps(response) 
+                error_msg = "Dietitian " +dietitian_id+ " not found"
+                return GlobalFunctions.return_error_msg(error_msg)
     
         except psycopg2.Error as e:
             Db_connection.closeConnection(Db_connection.getConnection());
-            response = {
-                        "status": "error",
-                        "message": "DB error: " + str(e)
-                    }            
-            return json.dumps(response)
+            return GlobalFunctions.return_error_msg("DB error: " + str(e))
         except Exception as e:
-            response = {
-                        "status": "error",
-                        "message": "Server error: " + str(e)
-                    }
-            Db_connection.closeConnection(Db_connection.getConnection());              
-            return json.dumps(response) 
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("Server error: " + str(e)) 

@@ -33,17 +33,13 @@ class MealPrep:
     @staticmethod
     def generate_shopping_list(dietitian_ID, recipee_id):
         err_msg = None
-        if dietitian_ID == '':
-            err_msg = 'Dietitian ID is missing'
-        if recipee_id == '' or recipee_id == 0 or recipee_id == '0':
+        if dietitian_ID == '' or not dietitian_ID.isnumeric():
+            err_msg = 'Please enter a valid Dietitian ID'
+        if recipee_id == '' or recipee_id == 0 or recipee_id == '0' or not recipee_id.isnumeric():
             err_msg = 'Please select a recipee'
 
         if err_msg != None:
-            response = {
-                        "status": "error",
-                        "message": err_msg
-                    }            
-            return json.dumps(response)
+            return GlobalFunctions.return_error_msg(err_msg)
         
         try:
             cur = Db_connection.getConnection().cursor()        
@@ -69,42 +65,32 @@ class MealPrep:
             cur.close()
             to_ret = json.dumps(shopping_List)
             return GlobalFunctions.cleanJSON(to_ret);
+      
         except psycopg2.Error as e:
-            response = {
-                        "status": "error",
-                        "message": "DB error: " + str(e)
-                    }
-            Db_connection.closeConnection(Db_connection.getConnection());              
-            return json.dumps(response)  
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("DB error: " + str(e))
         except Exception as e:
-            response = {
-                        "status": "error",
-                        "message": "Server error: " + str(e)
-                    }
-            Db_connection.closeConnection(Db_connection.getConnection());              
-            return json.dumps(response)         
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("Server error: " + str(e))     
     
     
     @staticmethod
     def generate_meal_plan_LSM(dietitian_ID, protein_goal, carbs_goal, fat_goal, nbr_days):
         err_msg = None
-        if dietitian_ID == '':
-            err_msg = 'Dietitian ID is missing'
-        if protein_goal == '' or protein_goal == 0 or protein_goal == '0':
-            err_msg = 'Protein goal should be a value bigger than 0'
-        if carbs_goal == '' or carbs_goal == 0 or carbs_goal == '0':
-            err_msg = 'Carbs goal should be a value bigger than 0'
-        if fat_goal == '' or fat_goal == 0 or fat_goal == '0':
-            err_msg = 'Fat goal should be a value bigger than 0'
-        if nbr_days == '' or nbr_days == 0 or nbr_days == '0':
-            err_msg = 'Number of days should be a value bigger than 0'
+        if dietitian_ID == '' or not dietitian_ID.isnumeric():
+            err_msg = 'Please insert a valid Dietitian ID'
+        if protein_goal == '' or protein_goal == 0 or protein_goal == '0' or not protein_goal.isnumeric():
+            err_msg = 'Please insert a valid Protein goal'
+        if carbs_goal == '' or carbs_goal == 0 or carbs_goal == '0' or not carbs_goal.isnumeric():
+            err_msg = 'Please insert a valid Carbs goal'
+        if fat_goal == '' or fat_goal == 0 or fat_goal == '0' or not fat_goal.isnumeric():
+            err_msg = 'Please insert a valid Fat goal'
+        if nbr_days == '' or nbr_days == 0 or nbr_days == '0' or not nbr_days.isnumeric():
+            err_msg = 'Please insert a valid Number of days'
         
         if err_msg != None:
-            response = {
-                        "status": "error",
-                        "message": err_msg
-                    }            
-            return json.dumps(response)
+            return GlobalFunctions.return_error_msg(err_msg)
+        
         try:
             cur = Db_connection.getConnection().cursor()
             # Fetch all meals
@@ -155,44 +141,31 @@ class MealPrep:
             return GlobalFunctions.cleanJSON(to_ret);
 
         except psycopg2.Error as e:
-            response = {
-                        "status": "error",
-                        "message": "DB error: " + str(e)
-                    }
-            Db_connection.closeConnection(Db_connection.getConnection());              
-            return json.dumps(response)  
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("DB error: " + str(e))
         except Exception as e:
-            response = {
-                        "status": "error",
-                        "message": "Server error: " + str(e)
-                    }
-            Db_connection.closeConnection(Db_connection.getConnection());              
-            return json.dumps(response) 
-
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("Server error: " + str(e))
 
     
     def generate_meal_plan_with_fixed_lunch(dietitian_ID, protein_goal, carbs_goal, fat_goal, nbr_days, fixed_lunch_id):
         err_msg = None
-        if dietitian_ID == '':
-            err_msg = 'Dietitian ID is missing'
-        if protein_goal == '' or protein_goal == 0 or protein_goal == '0':
-            err_msg = 'Protein goal should be a value bigger than 0'
-        if carbs_goal == '' or carbs_goal == 0 or carbs_goal == '0':
-            err_msg = 'Carbs goal should be a value bigger than 0'
-        if fat_goal == '' or fat_goal == 0 or fat_goal == '0':
-            err_msg = 'Fat goal should be a value bigger than 0'
-        if nbr_days == '' or nbr_days == 0 or nbr_days == '0':
-            err_msg = 'Number of days should be a value bigger than 0'
-        if fixed_lunch_id == '' or fixed_lunch_id == 0 or fixed_lunch_id == '0':
-            err_msg = 'Fixed lunch should be delected'
+        if dietitian_ID == '' or not dietitian_ID.isnumeric():
+            err_msg = 'Please insert a valid Dietitian ID'
+        if protein_goal == '' or protein_goal == 0 or protein_goal == '0' or not protein_goal.isnumeric():
+            err_msg = 'Please insert a valid Protein goal'
+        if carbs_goal == '' or carbs_goal == 0 or carbs_goal == '0' or not carbs_goal.isnumeric():
+            err_msg = 'Please insert a valid Carbs goal'
+        if fat_goal == '' or fat_goal == 0 or fat_goal == '0' or not fat_goal.isnumeric():
+            err_msg = 'Please insert a valid Fat goal'
+        if nbr_days == '' or nbr_days == 0 or nbr_days == '0' or not nbr_days.isnumeric():
+            err_msg = 'Please insert a valid Number of days'
+        if fixed_lunch_id == '' or fixed_lunch_id == 0 or fixed_lunch_id == '0' or not fixed_lunch_id.isnumeric():
+            err_msg = 'Please insert a valid Fixed lunch'            
         
         if err_msg != None:
-            response = {
-                        "status": "error",
-                        "message": err_msg
-                    }            
-            return json.dumps(response)
-        
+            return GlobalFunctions.return_error_msg(err_msg)
+
         try:
             cur = Db_connection.getConnection().cursor()
             # Fetch all meals
@@ -210,11 +183,7 @@ class MealPrep:
             fixed_lunch = lunches[0] if lunches else None
 
             if not fixed_lunch:
-                response = {
-                            "status": "error",
-                            "message": 'Invalid fixed lunch ID'
-                        }            
-                return json.dumps(response)
+                return GlobalFunctions.return_error_msg('Please insert a valid Fixed lunch')
             
             # Generate all possible combinations of meals for breakfast and dinner with the fixed lunch
             for breakfast in breakfasts:
@@ -245,19 +214,11 @@ class MealPrep:
             
             to_ret = json.dumps({"best_combinations": best_combinations}, default=lambda x: float(x) if isinstance(x, Decimal) else x)
             return GlobalFunctions.cleanJSON(to_ret)
+  
         except psycopg2.Error as e:
-            response = {
-                        "status": "error",
-                        "message": "DB error: " + str(e)
-                    }
-            Db_connection.closeConnection(Db_connection.getConnection());              
-            return json.dumps(response)  
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("DB error: " + str(e))
         except Exception as e:
-            response = {
-                        "status": "error",
-                        "message": "Server error: " + str(e)
-                    }
-            Db_connection.closeConnection(Db_connection.getConnection());              
-            return json.dumps(response) 
-       
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("Server error: " + str(e))    
 

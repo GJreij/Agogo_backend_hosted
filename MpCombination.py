@@ -1,3 +1,4 @@
+from GlobalFunctions import GlobalFunctions
 from flask import jsonify, request
 import json
 import psycopg2
@@ -20,7 +21,8 @@ class MpCombination:
                         "dinner": self.dinner.recipee_json(),
                         "score": self.score
                                 }
-        return combination
+        
+        return GlobalFunctions.cleanJSON(json.dumps(combination))
     
     def get_breakfast(self):
         return self.breakfast
@@ -67,8 +69,19 @@ class MpCombination:
 
     @staticmethod
     def getCombination(diet_id,patient_id,combination_id):
-        cur = Db_connection.getConnection().cursor()
+        err_msg = None
+        if diet_id == '' or diet_id == None or not diet_id.isnumeric():
+            err_msg = 'Please insert a valid Diet ID'
+        if patient_id == '' or patient_id == None or not patient_id.isnumeric():
+            err_msg = 'Please insert a valid patient ID'  
+        if combination_id == '' or combination_id == None or not combination_id.isnumeric():
+            err_msg = 'Please insert a valid combination ID'                      
+        #response if error
+        if err_msg != None:
+            return GlobalFunctions.return_error_msg(err_msg)
+        
         try:
+            cur = Db_connection.getConnection().cursor()
             query = '''select r.recipee_id, r.name, r.description, LOWER(r.meal_type), r.calories, r.fat, r.protein, r.servings, r.carbs
                         from meal_prep mp ,recipee r 
                         where mp.recipee_id = r.recipee_id 
@@ -87,11 +100,14 @@ class MpCombination:
                     lunch = Recipee(record[0],record[1],record[2],record[3],record[4],record[5],record[6],record[7],record[8]);
                 if record[3]=='dinner':
                     dinner = Recipee(record[0],record[1],record[2],record[3],record[4],record[5],record[6],record[7],record[8]); 
-            
+            cur.close()
             return MpCombination(breakfast,lunch,dinner,0)
+        
         except psycopg2.Error as e:
-            return f"Database error: {e}"
-        finally:
-            if cur:
-                cur.close()
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("DB error: " + str(e))
+        except Exception as e:
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("Server error: " + str(e))
+
     

@@ -43,15 +43,13 @@ class Patient:
             err_msg = 'Password is missing'
         #response if error
         if err_msg != None:
-            response = {
-                        "status": "error",
-                        "message": err_msg
-                    }            
-            return json.dumps(response)
+            return GlobalFunctions.return_error_msg(err_msg)
+        
         try:
             cur = Db_connection.getConnection().cursor()
             if p_email == '' or p_pwd == '':
-                return('Please enter an Email and Password');
+                return GlobalFunctions.return_error_msg("Please enter an Email and Password")
+                
             cur.execute("select p.patient_id ,p.first_name ,p.last_name ,p.gender ,to_char(p.date_of_birth, 'MM/DD/YYYY'),p.phone ,p.email ,p.address ,p.dietitian_id ,p.status  from patient_static_info p where p.email = %s and p.pwd = %s",(p_email,p_pwd))
             patient = cur.fetchall()
             if cur.rowcount == 1 :
@@ -61,36 +59,24 @@ class Patient:
                 return patientR.Patient_json();
             else :
                 cur.close;
-                return('The email or password is incorrect');
-        except psycopg2.Error as e:
-            response = {
-                        "status": "error",
-                        "message": "DB error: " + str(e)
-                    }
-            Db_connection.closeConnection(Db_connection.getConnection());              
-            return json.dumps(response)  
-        except Exception as e:
-            response = {
-                        "status": "error",
-                        "message": "Server error: " + str(e)
-                    }
-            Db_connection.closeConnection(Db_connection.getConnection());              
-            return json.dumps(response) 
+                return GlobalFunctions.return_error_msg("The email or password is incorrect")
 
+        except psycopg2.Error as e:
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("DB error: " + str(e))
+        except Exception as e:
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("Server error: " + str(e))
 
 
     @staticmethod
     def fetchPatientStaticInfo(p_ID):
         err_msg = None
-        if p_ID == '' or p_ID == None:
-            err_msg = 'Patient ID is missing'
+        if p_ID == '' or p_ID == None or not p_ID.isnumeric():
+            err_msg = 'Please insert a valid patient ID'
         #response if error
         if err_msg != None:
-            response = {
-                        "status": "error",
-                        "message": err_msg
-                    }            
-            return json.dumps(response)
+           return GlobalFunctions.return_error_msg(err_msg)
         try:
             cur = Db_connection.getConnection().cursor()
             cur.execute("select p.patient_id ,p.first_name ,p.last_name ,p.gender ,to_char(p.date_of_birth, 'MM/DD/YYYY'),p.phone ,p.email ,p.address ,p.dietitian_id ,p.status  from patient_static_info p where p.patient_id = %s",(p_ID))
@@ -101,40 +87,24 @@ class Patient:
                 return patientR.Patient_json();
             else :
                 cur.close;
-                response = {
-                        "status": "error",
-                        "message": "The patient ID is incorrect"
-                    }            
-                return json.dumps(response)
-    
+                return GlobalFunctions.return_error_msg("The patient ID is incorrect")
+                
         except psycopg2.Error as e:
-            response = {
-                        "status": "error",
-                        "message": "DB error: " + str(e)
-                    }
-            Db_connection.closeConnection(Db_connection.getConnection());              
-            return json.dumps(response)  
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("DB error: " + str(e))
         except Exception as e:
-            response = {
-                        "status": "error",
-                        "message": "Server error: " + str(e)
-                    }
-            Db_connection.closeConnection(Db_connection.getConnection());              
-            return json.dumps(response) 
-
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("Server error: " + str(e))
 
     @staticmethod
     def fetchPatientAllInfo(p_ID):
         err_msg = None
-        if p_ID == '' or p_ID == None:
-            err_msg = 'Patient ID is missing'
+        if p_ID == '' or p_ID == None or not p_ID.isnumeric():
+            err_msg = 'Please insert a valid patient ID'
+
         #response if error
         if err_msg != None:
-            response = {
-                        "status": "error",
-                        "message": err_msg
-                    }            
-            return json.dumps(response)
+            return GlobalFunctions.return_error_msg(err_msg)
         try:
             p_stat_info = Patient.fetchPatientStaticInfo(p_ID);
             p_Anthropometry = Anthropometry.fetchPatientLastAnth(p_ID);
@@ -149,33 +119,24 @@ class Patient:
             p_data['p_LifeStyle'] = p_LifeStyle
             to_ret = json.dumps(p_data)
             return GlobalFunctions.cleanJSON(to_ret)
+                
         except psycopg2.Error as e:
-            response = {
-                        "status": "error",
-                        "message": "DB error: " + str(e)
-                    }
-            Db_connection.closeConnection(Db_connection.getConnection());              
-            return json.dumps(response)  
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("DB error: " + str(e))
         except Exception as e:
-            response = {
-                        "status": "error",
-                        "message": "Server error: " + str(e)
-                    }
-            Db_connection.closeConnection(Db_connection.getConnection());              
-            return json.dumps(response) 
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("Server error: " + str(e))
+
 
     @staticmethod
     def deleteAccount(patient_ID):
         err_msg = None
-        if patient_ID == '' or patient_ID == None:
-            err_msg = 'Patient ID is missing'
-        #response if error
+        if patient_ID == '' or patient_ID == None or not patient_ID.isnumeric():
+            err_msg = 'Please insert a valid patient ID'
+                #response if error
         if err_msg != None:
-            response = {
-                        "status": "error",
-                        "message": err_msg
-                    }            
-            return json.dumps(response)        
+            return GlobalFunctions.return_error_msg(err_msg)
+
         try:
             cur = Db_connection.getConnection().cursor()
             cur.execute('delete from patient_static_info where patient_id = {0}'.format(patient_ID))
@@ -185,20 +146,13 @@ class Patient:
                         "message": "Patient deleted successfully"
                     }            
             return json.dumps(response) 
+        
         except psycopg2.Error as e:
-            response = {
-                        "status": "error",
-                        "message": "DB error: " + str(e)
-                    }
-            Db_connection.closeConnection(Db_connection.getConnection());              
-            return json.dumps(response)  
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("DB error: " + str(e))
         except Exception as e:
-            response = {
-                        "status": "error",
-                        "message": "Server error: " + str(e)
-                    }
-            Db_connection.closeConnection(Db_connection.getConnection());              
-            return json.dumps(response) 
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("Server error: " + str(e))
 
     @staticmethod
     def updatePatientStatInfo(patientJSON):
@@ -211,12 +165,8 @@ class Patient:
             err_msg = "patient_ID is missing"   
         #response if error
         if err_msg != None:
-            response = {
-                        "status": "error",
-                        "message": err_msg
-                    }            
-            return json.dumps(response)
-        
+            return GlobalFunctions.return_error_msg(err_msg)
+            
         try:
             query = 'UPDATE patient_static_info SET ' + GlobalFunctions.buildUpdateQuery(patient_data) 
             query = query + "WHERE patient_id = '" + str(patient_data['patient_ID']) + "'"
@@ -224,23 +174,15 @@ class Patient:
             cur.execute(query)
             Db_connection.commit();
             response = {
-                        "status": "uccess",
+                        "status": "success",
                         "message": "Patient updated successfully"
                     }            
             return json.dumps(response)
-        
+            
         except psycopg2.Error as e:
-            response = {
-                        "status": "error",
-                        "message": "DB error: " + str(e)
-                    }
-            Db_connection.closeConnection(Db_connection.getConnection());              
-            return json.dumps(response)  
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("DB error: " + str(e))
         except Exception as e:
-            response = {
-                        "status": "error",
-                        "message": "Server error: " + str(e)
-                    }
-            Db_connection.closeConnection(Db_connection.getConnection());              
-            return json.dumps(response) 
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("Server error: " + str(e))
     
