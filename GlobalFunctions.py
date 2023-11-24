@@ -119,6 +119,6 @@ class GlobalFunctions:
         response = {
                         "status": "success",
                         "message": "Request executed successfully",
-                        "data" : msg
+                        "returned" : msg
                     }            
         return GlobalFunctions.cleanJSON(response)
