@@ -118,6 +118,7 @@ class GlobalFunctions:
     def return_success_msg(msg):
         response = {
                         "status": "success",
-                        "message": msg
+                        "message": "Request executed successfully",
+                        "data" : msg
                     }            
         return GlobalFunctions.cleanJSON(response)
