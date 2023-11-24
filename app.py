@@ -101,6 +101,7 @@ def getPatientStaticInfo():
     #data = request.get_json()
     #patient_ID = data['patient_ID']
     patient_ID = request.args.get("patient_ID")
+    print(patient_ID)
     return Patient.fetchPatientStaticInfo(patient_ID);
     
 

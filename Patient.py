@@ -79,10 +79,12 @@ class Patient:
            return GlobalFunctions.return_error_msg(err_msg)
         try:
             cur = Db_connection.getConnection().cursor()
-            cur.execute("select p.patient_id ,p.first_name ,p.last_name ,p.gender ,to_char(p.date_of_birth, 'MM/DD/YYYY'),p.phone ,p.email ,p.address ,p.dietitian_id ,p.status  from patient_static_info p where p.patient_id = %s",(p_ID))
+            cur.execute("select p.patient_id ,p.first_name ,p.last_name ,p.gender ,to_char(p.date_of_birth, 'MM/DD/YYYY'),p.phone ,p.email ,p.address ,p.dietitian_id ,p.status  from patient_static_info p where p.patient_id = %s",(p_ID,))
             patient = cur.fetchall()
             if cur.rowcount == 1 :
+                print(patient)
                 patientR = Patient(patient[0][0],patient[0][1],patient[0][2],patient[0][3],patient[0][4],patient[0][5],patient[0][6],patient[0][7],patient[0][8],patient[0][9])
+                print("still nothing")
                 cur.close;
                 return patientR.Patient_json();
             else :
