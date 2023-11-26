@@ -76,27 +76,27 @@ class MealPrep:
     
     @staticmethod
     def generate_meal_plan_LSM(dietitian_ID, protein_goal, carbs_goal, fat_goal, nbr_days):
-        err_msg = None
-        if dietitian_ID == '' or not dietitian_ID.isnumeric():
-            err_msg = 'Please insert a valid Dietitian ID'
-        if protein_goal == '' or protein_goal == 0 or protein_goal == '0' or not protein_goal.isnumeric():
-            err_msg = 'Please insert a valid Protein goal'
-        if carbs_goal == '' or carbs_goal == 0 or carbs_goal == '0' or not carbs_goal.isnumeric():
-            err_msg = 'Please insert a valid Carbs goal'
-        if fat_goal == '' or fat_goal == 0 or fat_goal == '0' or not fat_goal.isnumeric():
-            err_msg = 'Please insert a valid Fat goal'
-        if nbr_days == '' or nbr_days == 0 or nbr_days == '0' or not nbr_days.isnumeric():
-            err_msg = 'Please insert a valid Number of days'
-        
-        if err_msg != None:
-            return GlobalFunctions.return_error_msg(err_msg)
-        dietitian_ID = int(dietitian_ID)
-        protein_goal = int(protein_goal)
-        carbs_goal = int(carbs_goal)
-        fat_goal = int(fat_goal)
-        nbr_days = int(nbr_days)
-
         try:
+            err_msg = None
+            if dietitian_ID == '' or not dietitian_ID.isnumeric():
+                err_msg = 'Please insert a valid Dietitian ID'
+            if protein_goal == '' or protein_goal == 0 or protein_goal == '0' or not str(protein_goal).isnumeric():
+                err_msg = 'Please insert a valid Protein goal'
+            if carbs_goal == '' or carbs_goal == 0 or carbs_goal == '0' or not str(carbs_goal).isnumeric():
+                err_msg = 'Please insert a valid Carbs goal'
+            if fat_goal == '' or fat_goal == 0 or fat_goal == '0' or not str(fat_goal).isnumeric():
+                err_msg = 'Please insert a valid Fat goal'
+            if nbr_days == '' or nbr_days == 0 or nbr_days == '0' or not str(nbr_days).isnumeric():
+                err_msg = 'Please insert a valid Number of days'
+            
+            if err_msg != None:
+                return GlobalFunctions.return_error_msg(err_msg)
+            dietitian_ID = int(dietitian_ID)
+            protein_goal = int(protein_goal)
+            carbs_goal = int(carbs_goal)
+            fat_goal = int(fat_goal)
+            nbr_days = int(nbr_days)
+        
             cur = Db_connection.getConnection().cursor()
             # Fetch all meals
             cur.execute("SELECT recipee_id, protein, carbs, fat, meal_type, servings, name, description,calories FROM recipee")
@@ -138,11 +138,8 @@ class MealPrep:
                                     # all_combinations = all_combinations.append(combJson);
 
             # Sort the combinations based on LSM score in ascending order
-
-            print("before sort")
-            print(all_combinations)
+ 
             all_combinations.sort(key=lambda x: x["score"])
-            print("After sort")
             nbr_days = int(nbr_days)
             best_combinations = all_combinations[:nbr_days]
             cur.close()
