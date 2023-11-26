@@ -1,3 +1,4 @@
+from datetime import date
 import psycopg2
 from werkzeug.exceptions import BadRequest
 import json
@@ -89,31 +90,75 @@ class Anthropometry:
             Db_connection.closeConnection(Db_connection.getConnection());
             return GlobalFunctions.return_error_msg("Server error: " + str(e))
     
-    
     @staticmethod
-    def addAnthropometry(patientJSON):
-        err_msg = None
-        patient_data = json.loads(patientJSON)
-        if 'patient_ID' in patient_data:
-            if patient_data['patient_ID'] == '':
-                err_msg = "patient_ID is missing"
-        else:
-            err_msg = "patient_ID is missng"   
-        #response if error
-        if err_msg != None:
-            return GlobalFunctions.return_error_msg(err_msg)
-        
-        try:
-            query = 'INSERT INTO anthropometry ' + GlobalFunctions.buildInsertQuery(patient_data) 
-            cur = Db_connection.getConnection().cursor()
-            cur.execute(query)
-            Db_connection.commit();
-            cur.close();
-            response = {
+    def insertAnthropometry(patient_data):
+        query = 'INSERT INTO anthropometry ' + GlobalFunctions.buildInsertQuery(patient_data) 
+        cur = Db_connection.getConnection().cursor()
+        cur.execute(query)
+        Db_connection.commit();
+        cur.close();
+        response = {
                         "status": "success",
                         "message": "Anthropometry log added successfully"
                     }            
-            return json.dumps(response)
+        return json.dumps(response)
+
+    @staticmethod
+    def checkUpdate(patient_ID,measurement_date):
+        cur = Db_connection.getConnection().cursor()
+        cur.execute("SELECT count(*) FROM public.anthropometry where patient_id = %s AND measurement_date = to_date(%s, 'YYYY-MM-DD')",
+                    (patient_ID,measurement_date,))
+        count = cur.fetchone()
+        cur.close
+        
+        if count[0] == 0:
+            return False
+        else:
+            return True
+
+    @staticmethod
+    def updateAnthropometry(patient_data):
+        query = 'UPDATE anthropometry SET ' + GlobalFunctions.buildUpdateQuery(patient_data) 
+        query = query + "WHERE patient_id = '" + str(patient_data['patient_ID']) + "' AND measurement_date = to_date('"+patient_data['measurement_date']+"', 'YYYY-MM-DD')"
+        print(query)
+        cur = Db_connection.getConnection().cursor()
+        cur.execute(query)
+        Db_connection.commit();
+        response = {
+                        "status": "success",
+                        "message": "Anthropometry log Updated successfully"
+                    }
+        return json.dumps(response)  
+
+    @staticmethod
+    def addAnthropometry(patientJSON):
+        try:
+            err_msg = None
+            patient_data = json.loads(patientJSON)
+            if 'patient_ID' in patient_data:
+                if patient_data['patient_ID'] == '':
+                    err_msg = "patient_ID is missing"
+            else:
+                err_msg = "patient_ID is missng"   
+            #response if error
+            if err_msg != None:
+                return GlobalFunctions.return_error_msg(err_msg)
+        
+            #if front don't send measurment date, it will be set to sysdate
+            if 'measurement_date' in patient_data:
+                if patient_data['measurement_date'] == '':
+                    patient_data['measurement_date'] = date.today().strftime("%m/%d/%Y")
+            else:
+                patient_data['measurement_date'] = date.today().strftime("%m/%d/%Y")
+            
+            patient_data['measurement_date'] = GlobalFunctions.convert_date_to_DB_yyyy_mm_dd(patient_data['measurement_date'])
+            print("converted measurment date : "+patient_data['measurement_date'])
+
+            if Anthropometry.checkUpdate(patient_data['patient_ID'],GlobalFunctions.convert_date_to_DB_yyyy_mm_dd(patient_data['measurement_date'])):
+                return Anthropometry.updateAnthropometry(patient_data)
+            else:
+                return Anthropometry.insertAnthropometry(patient_data)
+            
         
         except psycopg2.Error as e:
             Db_connection.closeConnection(Db_connection.getConnection());

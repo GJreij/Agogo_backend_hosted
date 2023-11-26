@@ -97,10 +97,6 @@ class BodyComp:
        
     @staticmethod
     def updateBodyComp(patient_data):
-        
-            #query = 'UPDATE patient_static_info SET ' + GlobalFunctions.buildUpdateQuery(patient_data) 
-           # query = query + "WHERE patient_id = '" + str(patient_data['patient_ID']) + "'"
-
             query = 'UPDATE body_composition SET ' + GlobalFunctions.buildUpdateQuery(patient_data) 
             query = query + "WHERE patient_id = '" + str(patient_data['patient_ID']) + "' AND measurement_date = to_date('"+patient_data['measurement_date']+"', 'YYYY-MM-DD')"
             print(query)
@@ -141,7 +137,6 @@ class BodyComp:
             if err_msg != None:
                 GlobalFunctions.return_error_msg(err_msg)
 
-            print("incoming measurment date from front: " + patient_data['measurement_date'])
             #if front don't send measurment date, it will be set to sysdate
             if 'measurement_date' in patient_data:
                 if patient_data['measurement_date'] == '':
@@ -150,7 +145,6 @@ class BodyComp:
                 patient_data['measurement_date'] = date.today().strftime("%m/%d/%Y")
             
             patient_data['measurement_date'] = GlobalFunctions.convert_date_to_DB_yyyy_mm_dd(patient_data['measurement_date'])
-            print("converted measurment date : "+patient_data['measurement_date'])
           
             #Checking if line already exists:
             if BodyComp.checkUpdate(patient_data['patient_ID'],GlobalFunctions.convert_date_to_DB_yyyy_mm_dd(patient_data['measurement_date'])):

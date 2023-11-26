@@ -5,7 +5,7 @@
     "title": "AGOGO API",
     "description": "API for AGOGO's APP."
   },
-  "host": "127.0.0.1:5000",
+  "host": "agogo-app-7648993f1c5c.herokuapp.com",
   "basePath": "/",
   "schemes": [
     "http",
