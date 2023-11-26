@@ -1,3 +1,4 @@
+from datetime import date
 import psycopg2
 from werkzeug.exceptions import BadRequest
 import json
@@ -80,21 +81,8 @@ class BodyComp:
             Db_connection.closeConnection(Db_connection.getConnection());
             return GlobalFunctions.return_error_msg("Server error: " + str(e))
 
-
     @staticmethod
-    def addBodyComp(patientJSON):
-        err_msg = None
-        patient_data = json.loads(patientJSON)
-        if 'patient_ID' in patient_data:
-            if patient_data['patient_ID'] == ''  or not patient_data['patient_ID'].isnumeric():
-                err_msg = 'Please insert a valid patient ID'
-        else:
-            err_msg = "patient_ID is missing"   
-        #response if error
-        if err_msg != None:
-            GlobalFunctions.return_error_msg(err_msg)
-
-        try:
+    def insertBodyComp(patient_data):
             query = 'INSERT INTO body_composition ' + GlobalFunctions.buildInsertQuery(patient_data) 
             print(query)
             cur = Db_connection.getConnection().cursor()
@@ -106,9 +94,77 @@ class BodyComp:
                     }
             return json.dumps(response)  
 
+       
+    @staticmethod
+    def updateBodyComp(patient_data):
+        
+            #query = 'UPDATE patient_static_info SET ' + GlobalFunctions.buildUpdateQuery(patient_data) 
+           # query = query + "WHERE patient_id = '" + str(patient_data['patient_ID']) + "'"
+
+            query = 'UPDATE body_composition SET ' + GlobalFunctions.buildUpdateQuery(patient_data) 
+            query = query + "WHERE patient_id = '" + str(patient_data['patient_ID']) + "' AND measurement_date = to_date('"+patient_data['measurement_date']+"', 'YYYY-MM-DD')"
+            print(query)
+            cur = Db_connection.getConnection().cursor()
+            cur.execute(query)
+            Db_connection.commit();
+            response = {
+                        "status": "success",
+                        "message": "Body composition log Updated successfully"
+                    }
+            return json.dumps(response)  
+
+        
+    @staticmethod
+    def checkUpdate(patient_ID,measurement_date):
+        cur = Db_connection.getConnection().cursor()
+        cur.execute("SELECT count(*) FROM public.body_composition where patient_id = %s AND measurement_date = to_date(%s, 'YYYY-MM-DD')",
+                    (patient_ID,measurement_date,))
+        count = cur.fetchone()
+        cur.close
+        
+        if count[0] == 0:
+            return False
+        else:
+            return True
+
+    @staticmethod
+    def addBodyComp(patientJSON):
+        try:
+            err_msg = None
+            patient_data = json.loads(patientJSON)
+            if 'patient_ID' in patient_data:
+                if patient_data['patient_ID'] == ''  or not patient_data['patient_ID'].isnumeric():
+                    err_msg = 'Please insert a valid patient ID'
+            else:
+                err_msg = "patient_ID is missing"   
+            #response if error
+            if err_msg != None:
+                GlobalFunctions.return_error_msg(err_msg)
+
+            print("incoming measurment date from front: " + patient_data['measurement_date'])
+            #if front don't send measurment date, it will be set to sysdate
+            if 'measurement_date' in patient_data:
+                if patient_data['measurement_date'] == '':
+                    patient_data['measurement_date'] = date.today().strftime("%m/%d/%Y")
+            else:
+                patient_data['measurement_date'] = date.today().strftime("%m/%d/%Y")
+            
+            patient_data['measurement_date'] = GlobalFunctions.convert_date_to_DB_yyyy_mm_dd(patient_data['measurement_date'])
+            print("converted measurment date : "+patient_data['measurement_date'])
+          
+            #Checking if line already exists:
+            if BodyComp.checkUpdate(patient_data['patient_ID'],GlobalFunctions.convert_date_to_DB_yyyy_mm_dd(patient_data['measurement_date'])):
+                return BodyComp.updateBodyComp(patient_data)
+            else:
+                return BodyComp.insertBodyComp(patient_data)
+        
         except psycopg2.Error as e:
             Db_connection.closeConnection(Db_connection.getConnection());
             return GlobalFunctions.return_error_msg("DB error: " + str(e))
         except Exception as e:
             Db_connection.closeConnection(Db_connection.getConnection());
             return GlobalFunctions.return_error_msg("Server error: " + str(e))
+        
+
+
+        
