@@ -78,7 +78,7 @@ class MealPrep:
     def generate_meal_plan_LSM(dietitian_ID, protein_goal, carbs_goal, fat_goal, nbr_days):
         try:
             err_msg = None
-            if dietitian_ID == '' or not dietitian_ID.isnumeric():
+            if dietitian_ID == '' or not str(dietitian_ID).isnumeric():
                 err_msg = 'Please insert a valid Dietitian ID'
             if protein_goal == '' or protein_goal == 0 or protein_goal == '0' or not str(protein_goal).isnumeric():
                 err_msg = 'Please insert a valid Protein goal'
