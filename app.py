@@ -25,6 +25,9 @@ app = Flask(__name__)
 def hello_world():
     return 'AJOUJOUUUUUUU IS ONLINEEE!'
 
+@app.get('/altertbl')
+def akter():
+    return LifeStyle.moduf()
 
 @app.get('/admin/closeConn')
 def Close_Con():

@@ -8,7 +8,7 @@ class Db_connection:
          if Db_connection.CONNECTION is None :
             try:
                 # set this as true before pushing to Heroku - False to test locally
-                HOST = True
+                HOST = False
 
                 if HOST == True : 
                     DATABASE_URL = os.environ.get('DATABASE_URL')
