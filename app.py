@@ -102,7 +102,14 @@ def getPatientStaticInfo():
     #patient_ID = data['patient_ID']
     patient_ID = request.args.get("patient_ID")
     return Patient.fetchPatientStaticInfo(patient_ID);
-    
+
+
+@app.get('/patient/calculations')
+def getPatientCalculations():
+    #data = request.get_json()
+    #patient_ID = data['patient_ID']
+    patient_ID = request.args.get("patient_ID")
+    return Patient.fetchPatientCalculations(patient_ID);
 
 @app.get('/patient/LastAnthropometry')
 def getPatientLastAnthropometry():
