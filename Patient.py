@@ -213,13 +213,8 @@ class Patient:
                 heightcm = decimal.Decimal(patient[0][5])
                 heightM = decimal.Decimal(heightcm/100)
                 cur.close();
-                print("___________________")
-                print("age " + str(age))
-                print("weight " + str(weight))
-                print("heightcm " + str(heightcm))
-                print("heightM " + str(heightM))
-                print("___________________")
-                #calculate:
+
+                #calculate BMI:
                 BMI = weight / (heightM*heightM)
 
                 if gender.upper() == "MALE":
@@ -265,6 +260,7 @@ class Patient:
             #PREPARING THE RETURN
             to_ret = {
                 "patient_ID" : str(p_ID),
+                "BMI" : str(round(BMI,2)),
                 "BMR_WHO" : str(round(BMR_WHO,2)),
                 "BMR_Mifflin_StJeor" : str(round(BMR_Mifflin_StJeor,2)),
                 "BMR_Harris_Benedict" : str(round(BMR_Harris_Benedict,2)),
