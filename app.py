@@ -25,10 +25,6 @@ app = Flask(__name__)
 def hello_world():
     return 'AJOUJOUUUUUUU IS ONLINEEE!'
 
-@app.get('/altertbl')
-def akter():
-    return LifeStyle.moduf()
-
 @app.get('/admin/closeConn')
 def Close_Con():
      Db_connection.closeConnection(Db_connection.getConnection())
@@ -113,6 +109,14 @@ def getPatientCalculations():
     #patient_ID = data['patient_ID']
     patient_ID = request.args.get("patient_ID")
     return Patient.fetchPatientCalculations(patient_ID);
+
+
+@app.get('/patient/patientLogs')
+def getPatientLogs():
+    #data = request.get_json()
+    #patient_ID = data['patient_ID']
+    patient_ID = request.args.get("patient_ID")
+    return Patient.fetchPatientLogs(patient_ID);    
 
 @app.get('/patient/LastAnthropometry')
 def getPatientLastAnthropometry():
@@ -446,7 +450,6 @@ def getRecipeeByID():
     except Exception as e:
         app.logger.error(f"Exception occurred: {e}")
         return jsonify({'status': 'error', 'message': 'Something went wrong'}), 500
-
 
 
 

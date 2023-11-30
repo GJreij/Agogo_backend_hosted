@@ -173,16 +173,3 @@ class LifeStyle:
             Db_connection.closeConnection(Db_connection.getConnection());
             return GlobalFunctions.return_error_msg("Server error: " + str(e))
         
-
-    @staticmethod
-    def moduf():
-        try:
-            cur = Db_connection.getConnection().cursor()
-            cur.execute("ALTER TABLE life_style ADD COLUMN observations VARCHAR")
-            return "OK"
-        except psycopg2.Error as e:
-            Db_connection.closeConnection(Db_connection.getConnection());
-            return GlobalFunctions.return_error_msg("DB error: " + str(e))
-        except Exception as e:
-            Db_connection.closeConnection(Db_connection.getConnection());
-            return GlobalFunctions.return_error_msg("Server error: " + str(e))

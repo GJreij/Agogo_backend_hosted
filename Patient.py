@@ -274,3 +274,44 @@ class Patient:
         except Exception as e:
             Db_connection.closeConnection(Db_connection.getConnection());
             return GlobalFunctions.return_error_msg("Server error: " + str(e))
+        
+
+    @staticmethod
+    def fetchPatientLogs(p_ID):
+        err_msg = None
+        if p_ID == '' or p_ID == None or not p_ID.isnumeric():
+            err_msg = 'Please insert a valid patient ID'
+        #response if error
+        if err_msg != None:
+           return GlobalFunctions.return_error_msg(err_msg)
+        try:
+            #Calculating BMR
+            cur = Db_connection.getConnection().cursor()
+            cur.execute("select coalesce(a.patient_id,bc.patient_id ) ,coalesce (a.measurement_date,bc.measurement_date) as  measurement_date, a.weight, a.waist_circumference  , bc.body_fat_percentage ,bc.fat_mass ,bc.muscle_mass ,bc.muscle_mass_percentage from anthropometry a full outer join body_composition bc on a.patient_id = bc.patient_id and a.measurement_date = bc.measurement_date where  a.patient_id =%s or bc.patient_id = %s",(p_ID,p_ID,))
+            patientLogs = cur.fetchall()
+            if cur.rowcount == 0 :
+                cur.close();
+                return GlobalFunctions.return_error_msg("The patient ID is incorrect")
+            else :
+                jsonLogs = [];
+                for log in patientLogs:
+                    to_ret_Log = {
+                            "patient_ID" : str(log[0]),
+                            "measurement_date" : str(log[1]),
+                            "weight" : str(log[2]),
+                            "waist_circumference" : str(log[3]),
+                            "body_fat_percentage" : str(log[4]),
+                            "fat_mass" : str(log[5]),
+                            "muscle_mass" : str(log[6]),
+                            "muscle_mass_percentage" : str(log[7]),
+                        }
+                    jsonLogs.append(json.dumps(to_ret_Log))
+
+                return GlobalFunctions.cleanJSON(GlobalFunctions.return_success_msg(jsonLogs));
+
+        except psycopg2.Error as e:
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("DB error: " + str(e))
+        except Exception as e:
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("Server error: " + str(e))
