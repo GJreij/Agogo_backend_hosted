@@ -1,4 +1,5 @@
 import json
+from GlobalFunctions import GlobalFunctions
 from werkzeug.exceptions import BadRequest
 from flask import Flask, jsonify, request
 from BodyComp import BodyComp
@@ -341,22 +342,14 @@ def createDiet():
 
 @app.put('/Diet/udpateDiet')
 def updateDiet():
-    try:
-        data = request.get_json()
-        diet_id = data.get('diet_id')
+    data = request.get_json()
+    diet_id = data.get('diet_id')
 
-        if not diet_id:
-            return jsonify({'status': 'error', 'message': 'Diet ID is required'}), 400
+    if not diet_id:
+        return GlobalFunctions.return_error_msg('Diet ID is required')
+    return Diet.updateDiet(diet_id, data)
 
-        result = Diet.updateDiet(diet_id, data)
-        return jsonify({'status': 'success', 'message': result}), 200
-
-    except ValueError as ve:
-        return jsonify({'status': 'error', 'message': str(ve)}), 400
-    except Exception as e:
-        app.logger.error(f"Exception occurred: {e}")
-        return jsonify({'status': 'error', 'message': 'Something went wrong'}), 500     
-
+   
 @app.delete('/Diet/deleteDiet')
 def deleteDiet():
     try:
@@ -377,44 +370,16 @@ def deleteDiet():
 
 @app.get('/Diet/getDietHistory')
 def getDietHistory():
-    try:
         #data = request.get_json()
         #patient_id = data.get('patient_id')
-        patient_id = request.args.get("patient_id")
-        if not patient_id:
-            return jsonify({'status': 'error', 'message': 'Patient ID is required'}), 400
-
-        diets = Diet.getDietHistory(patient_id)
-        return jsonify({'status': 'success', 'data': diets}), 200
-
-    except ValueError as ve:
-        return jsonify({'status': 'error', 'message': str(ve)}), 400
-    except Exception as e:
-        app.logger.error(f"Exception occurred: {e}")
-        return jsonify({'status': 'error', 'message': 'Something went wrong'}), 500
+    patient_id = request.args.get("patient_id")
+    return Diet.getDietHistory(patient_id)
+   
 
 @app.get('/Diet/getLastDiet')
 def getLastDiet():
-    try:
-        #data = request.get_json()
-        #patient_id = data.get('patient_id')
-        patient_id = request.args.get("patient_id")
-
-        if not patient_id:
-            return jsonify({'status': 'error', 'message': 'Patient ID is required'}), 400
-
-        diet = Diet.getLastDiet(patient_id)
-        
-        if diet is None:
-            return jsonify({'status': 'success', 'message': 'No diets found for the given patient ID'}), 200
-
-        return jsonify({'status': 'success', 'data': diet}), 200
-
-    except ValueError as ve:
-        return jsonify({'status': 'error', 'message': str(ve)}), 400
-    except Exception as e:
-        app.logger.error(f"Exception occurred: {e}")
-        return jsonify({'status': 'error', 'message': 'Something went wrong'}), 500
+    patient_id = request.args.get("patient_id")
+    return Diet.getLastDiet(patient_id)
 
 @app.get('/diet/getDietCombinations')
 def getDietCombinations():
