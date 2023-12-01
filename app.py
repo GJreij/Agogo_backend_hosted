@@ -30,7 +30,7 @@ def hello_world():
 def chila_Con():
     try:
         cur = Db_connection.getConnection().cursor()
-        query = "ALTER TABLE public.diet DROP CONSTRAINT diet_pk"
+        query = "ALTER TABLE public.diet DROP CONSTRAINT diet_pk CASCADE"
         cur.execute(query)
         cur.connection.commit()
         cur.close()
