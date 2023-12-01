@@ -287,7 +287,7 @@ class Patient:
         try:
             #Calculating BMR
             cur = Db_connection.getConnection().cursor()
-            cur.execute("select coalesce(a.patient_id,bc.patient_id ) ,coalesce (a.measurement_date,bc.measurement_date) as  measurement_date, a.weight, a.waist_circumference  , bc.body_fat_percentage ,bc.fat_mass ,bc.muscle_mass ,bc.muscle_mass_percentage from anthropometry a full outer join body_composition bc on a.patient_id = bc.patient_id and a.measurement_date = bc.measurement_date where  a.patient_id =%s or bc.patient_id = %s",(p_ID,p_ID,))
+            cur.execute("select coalesce(a.patient_id,bc.patient_id ) ,coalesce (a.measurement_date,bc.measurement_date) as  measurement_date, a.weight, a.waist_circumference  , bc.body_fat_percentage ,bc.fat_mass ,bc.muscle_mass ,bc.muscle_mass_percentage from anthropometry a full outer join body_composition bc on a.patient_id = bc.patient_id and a.measurement_date = bc.measurement_date where  a.patient_id =%s or bc.patient_id = %s ORDER BY measurement_date DESC",(p_ID,p_ID,))
             patientLogs = cur.fetchall()
             if cur.rowcount == 0 :
                 cur.close();
