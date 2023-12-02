@@ -397,6 +397,11 @@ def inserCombs():
     data = request.get_json()
     return MpCombination.insertCombinations(data)
 
+@app.get('/diet/getDayCombinations')
+def getDayCombs():
+    diet_id = request.args.get("diet_id")
+    patient_id = request.args.get("patient_id")
+    return MpCombination.getDayCombination(diet_id,patient_id)
 
 ############################ Recipee Class
 

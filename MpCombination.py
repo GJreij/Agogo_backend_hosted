@@ -136,4 +136,44 @@ class MpCombination:
         Db_connection.commit();
         cur.close()
         return "Combination added successfully"
+    
 
+    @staticmethod
+    def getDayCombination(dietID,patientID):
+        try:
+            combinationsToRet = []
+            cur = Db_connection.getConnection().cursor()
+            query = '''select  combination_id, diet_id, patient_id,
+                        breakfast, breakfastservings, 
+                        lunch, lunchservings, 
+                        dinner, dinnerservings
+                        FROM combination
+                        WHERE patient_id =%s
+                        and diet_id = %s'''
+            cur.execute(query, (patientID,dietID,))
+            records = cur.fetchall()
+    
+            if records is None:
+                return GlobalFunctions.return_error_msg("no combinations found")
+            for record in records:
+                breakfast = Recipee.getRecipee(record[3])
+                breakfast = Recipee.transformJsonToRecipee(json.loads(breakfast))
+                breakfast.setServings(record[4])
+                lunch = Recipee.getRecipee(record[5])
+                lunch = Recipee.transformJsonToRecipee(json.loads(lunch))
+                lunch.setServings(record[6])
+                dinner = Recipee.getRecipee(record[7])
+                dinner = Recipee.transformJsonToRecipee(json.loads(dinner))
+                dinner.setServings(record[8])
+                combinationsToRet.append(MpCombination(breakfast,lunch,dinner,0).mpCombination_json())
+               
+            cur.close()
+
+            return GlobalFunctions.cleanJSON(GlobalFunctions.return_success_msg(combinationsToRet))
+        
+        except psycopg2.Error as e:
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("DB error: " + str(e))
+        except Exception as e:
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("Server error: " + str(e))
