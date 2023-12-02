@@ -26,21 +26,6 @@ app = Flask(__name__)
 def hello_world():
     return 'AJOUJOUUUUUUU IS ONLINEEE!'
 
-@app.get('/admin/chila')
-def chila_Con():
-    try:
-        cur = Db_connection.getConnection().cursor()
-        query = "ALTER TABLE public.diet DROP CONSTRAINT diet_pk CASCADE"
-        cur.execute(query)
-        cur.connection.commit()
-        cur.close()
-        Db_connection.closeConnection(Db_connection.getConnection())
-        return "OK"
-        
-    except Exception as e:
-        Db_connection.closeConnection(Db_connection.getConnection());
-        return GlobalFunctions.return_error_msg("Server error: " + str(e))
-
 
 @app.get('/admin/closeConn')
 def Close_Con():
@@ -406,6 +391,12 @@ def getDietCombinations():
     diet_id = request.args.get("diet_id")
     mpCombs = Diet.getDietCombinations(diet_id, patient_id)
     return mpCombs;
+
+@app.post('/diet/insertCombinations')
+def inserCombs():
+    data = request.get_json()
+    return MpCombination.insertCombinations(data)
+
 
 ############################ Recipee Class
 

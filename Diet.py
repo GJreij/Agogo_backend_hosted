@@ -44,7 +44,7 @@ class Diet:
             diet_id = cur.fetchone()[0]
             cur.connection.commit()
             cur.close()
-            return GlobalFunctions.return_success_msg(f"Diet added successfully with ID: {diet_id}")
+            return GlobalFunctions.return_success_msg(diet_id)
         
         except psycopg2.Error as e:
             Db_connection.closeConnection(Db_connection.getConnection());

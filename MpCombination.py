@@ -110,3 +110,30 @@ class MpCombination:
             return GlobalFunctions.return_error_msg("Server error: " + str(e))
 
     
+    @staticmethod
+    def insertCombinations(jsonCombs):
+        try:
+            for combination in jsonCombs:
+                print(combination)
+                if not 'diet_id' in combination or not 'breakfast' in combination or not 'breakfastservings' in combination or not 'lunch' in combination or not 'lunchservings' in combination or not 'dinner' in combination or not 'dinnerservings' in combination or not 'patient_id' in combination or combination['diet_id'] == None or combination['breakfast'] == None or combination['breakfastservings'] == None or combination['lunch'] == None or combination['lunchservings'] == None or combination['dinner'] == None or combination['dinnerservings'] == None or combination['patient_id'] == None or combination['diet_id'] == '' or combination['breakfast'] == '' or combination['breakfastservings'] == '' or combination['lunch'] == '' or combination['lunchservings'] == '' or combination['dinner'] == '' or combination['dinnerservings'] == '' or combination['patient_id'] == '':
+                    return GlobalFunctions.return_error_msg("the combination has missing values: "+ json.dumps(combination) )
+                MpCombination.insertCombination(combination)
+
+            return GlobalFunctions.return_success_msg("Combinations added successfully")
+        except psycopg2.Error as e:
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("DB error: " + str(e))
+        except Exception as e:
+            Db_connection.closeConnection(Db_connection.getConnection());
+            return GlobalFunctions.return_error_msg("Server error: " + str(e))
+        
+
+    @staticmethod
+    def insertCombination(combination):
+        query = 'INSERT INTO combination ' + GlobalFunctions.buildInsertQuery(combination) 
+        cur = Db_connection.getConnection().cursor()
+        cur.execute(query)
+        Db_connection.commit();
+        cur.close()
+        return "Combination added successfully"
+
