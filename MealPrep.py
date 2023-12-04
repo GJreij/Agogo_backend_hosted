@@ -109,33 +109,47 @@ class MealPrep:
             dinners = [meal for meal in meals if meal[4] == 'Dinner']
             # Use a heap to keep track of the top 7 combinations
             all_combinations = []
-            
+            unique_combinations = set()
             # Generate all possible combinations of meals for breakfast, lunch, and dinner
             for breakfast in breakfasts:
                 for lunch in lunches:
-                    for dinner in dinners:
-                        for breakfast_servings in range(1, int(breakfast[5]) + 1):  # Assuming servings is an integer
-                            for lunch_servings in range(1, int(lunch[5]) + 1):
-                                for dinner_servings in range(1, int(dinner[5]) + 1):
-                                    protein_meals = (breakfast[1] * breakfast_servings * breakfast_weight + 
-                                                    lunch[1] * lunch_servings * lunch_weight+ 
-                                                    dinner[1] * dinner_servings * dinner_weight)
-                                    carbs_meals = (breakfast[2] * breakfast_servings * breakfast_weight + 
-                                                lunch[2] * lunch_servings * lunch_weight+ 
-                                                dinner[2] * dinner_servings * dinner_weight)
-                                    fat_meals = (breakfast[3] * breakfast_servings * breakfast_weight + 
-                                                lunch[3] * lunch_servings * lunch_weight + 
-                                                dinner[3] * dinner_servings * dinner_weight)
-                                    
-                                    # Calculate LSM score
-                                    score = (4*(protein_goal - protein_meals)**2 + 
-                                            (carbs_goal - carbs_meals)**2 + 
-                                            (fat_goal - fat_meals)**2)
-                                    MpCombination.add_combination_lst(all_combinations,breakfast,lunch,dinner,breakfast_servings,lunch_servings,dinner_servings,score)
-                                    # combination = MpCombination.create_combination(breakfast,lunch,dinner,breakfast_servings,lunch_servings,dinner_servings,score)
-                                    # combJson = combination.mpCombination_json()
-                                    # print(combJson)
-                                    # all_combinations = all_combinations.append(combJson);
+                    for dinner in dinners:      
+                        if dinner[6] != breakfast[6] and dinner[6]!=lunch[6] and breakfast[6] !=lunch[6]:
+                            for breakfast_servings in range(1, int(breakfast[5]) + 1):  # Assuming servings is an integer
+                                for lunch_servings in range(1, int(lunch[5]) + 1):
+                                    for dinner_servings in range(1, int(dinner[5]) + 1):
+                                        protein_meals = (breakfast[1] * breakfast_servings * breakfast_weight + 
+                                                        lunch[1] * lunch_servings * lunch_weight+ 
+                                                        dinner[1] * dinner_servings * dinner_weight)
+                                        carbs_meals = (breakfast[2] * breakfast_servings * breakfast_weight + 
+                                                    lunch[2] * lunch_servings * lunch_weight+ 
+                                                    dinner[2] * dinner_servings * dinner_weight)
+                                        fat_meals = (breakfast[3] * breakfast_servings * breakfast_weight + 
+                                                    lunch[3] * lunch_servings * lunch_weight + 
+                                                    dinner[3] * dinner_servings * dinner_weight)
+                                        
+                                        # Calculate LSM scor
+                                        score = (4*(protein_goal - protein_meals)**2 + 
+                                                (carbs_goal - carbs_meals)**2 + 
+                                                (fat_goal - fat_meals)**2)
+                                        current_combination1 = tuple([breakfast[6], lunch[6], dinner[6]])
+                                        current_combination2 = tuple([breakfast[6], dinner[6], lunch[6]])
+                                        current_combination3 = tuple([dinner[6], breakfast[6], lunch[6]])
+                                        current_combination4 = tuple([dinner[6], lunch[6], breakfast[6]])
+                                        current_combination5 = tuple([lunch[6], breakfast[6],  dinner[6]])
+                                        current_combination6 = tuple([lunch[6],  dinner[6], breakfast[6]])
+
+                                        # Check if the combination is unique
+                                        if current_combination1 not in unique_combinations and current_combination2 not in unique_combinations and current_combination3 not in unique_combinations and current_combination4 not in unique_combinations and current_combination5 not in unique_combinations and current_combination6 not in unique_combinations :
+                                            # Add the combination to the set of unique combinations
+                                            unique_combinations.add(current_combination1)
+
+                                            # Add the combination to the list or perform further processing
+                                            MpCombination.add_combination_lst(all_combinations, breakfast, lunch, dinner, breakfast_servings, lunch_servings, dinner_servings, score)
+                                        # combination = MpCombination.create_combination(breakfast,lunch,dinner,breakfast_servings,lunch_servings,dinner_servings,score)
+                                        # combJson = combination.mpCombination_json()
+                                        # print(combJson)
+                                        # all_combinations = all_combinations.append(combJson);
 
             # Sort the combinations based on LSM score in ascending order
  
