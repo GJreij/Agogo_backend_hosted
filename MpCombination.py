@@ -11,7 +11,7 @@ class MpCombination:
         self.breakfast = breakfast
         self.lunch= lunch
         self.dinner = dinner
-        self.score = score
+        self.score = score 
 
     
     def mpCombination_json(self):
