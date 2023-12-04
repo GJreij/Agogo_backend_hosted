@@ -132,12 +132,12 @@ class MealPrep:
                                         score = (4*(protein_goal - protein_meals)**2 + 
                                                 (carbs_goal - carbs_meals)**2 + 
                                                 (fat_goal - fat_meals)**2)
-                                        current_combination1 = tuple([breakfast[6], lunch[6], dinner[6]])
-                                        current_combination2 = tuple([breakfast[6], dinner[6], lunch[6]])
-                                        current_combination3 = tuple([dinner[6], breakfast[6], lunch[6]])
-                                        current_combination4 = tuple([dinner[6], lunch[6], breakfast[6]])
-                                        current_combination5 = tuple([lunch[6], breakfast[6],  dinner[6]])
-                                        current_combination6 = tuple([lunch[6],  dinner[6], breakfast[6]])
+                                        current_combination1 = tuple([breakfast[6], lunch[6], dinner[6], breakfast_servings, lunch_servings, dinner_servings])
+                                        current_combination2 = tuple([breakfast[6], dinner[6], lunch[6], breakfast_servings, dinner_servings, lunch_servings])
+                                        current_combination3 = tuple([dinner[6], breakfast[6], lunch[6], dinner_servings, breakfast_servings, lunch_servings])
+                                        current_combination4 = tuple([dinner[6], lunch[6], breakfast[6], dinner_servings, lunch_servings, breakfast_servings])
+                                        current_combination5 = tuple([lunch[6], breakfast[6],  dinner[6], lunch_servings, breakfast_servings,  dinner_servings])
+                                        current_combination6 = tuple([lunch[6],  dinner[6], breakfast[6], lunch_servings,  dinner_servings, breakfast_servings])
 
                                         # Check if the combination is unique
                                         if current_combination1 not in unique_combinations and current_combination2 not in unique_combinations and current_combination3 not in unique_combinations and current_combination4 not in unique_combinations and current_combination5 not in unique_combinations and current_combination6 not in unique_combinations :
