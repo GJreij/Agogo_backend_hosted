@@ -26,6 +26,7 @@ app = Flask(__name__)
 def hello_world():
     return 'AJOUJOUUUUUUU IS ONLINEEE!'
 
+
 @app.get('/admin/closeConn')
 def Close_Con():
      Db_connection.closeConnection(Db_connection.getConnection())
@@ -390,6 +391,17 @@ def getDietCombinations():
     diet_id = request.args.get("diet_id")
     mpCombs = Diet.getDietCombinations(diet_id, patient_id)
     return mpCombs;
+
+@app.post('/diet/insertCombinations')
+def inserCombs():
+    data = request.get_json()
+    return MpCombination.insertCombinations(data)
+
+@app.get('/diet/getDayCombinations')
+def getDayCombs():
+    diet_id = request.args.get("diet_id")
+    patient_id = request.args.get("patient_id")
+    return MpCombination.getDayCombination(diet_id,patient_id)
 
 ############################ Recipee Class
 

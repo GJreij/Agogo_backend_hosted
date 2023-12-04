@@ -20,6 +20,10 @@ class Recipee:
         json_recipee = json.dumps(vars(self))
         return json_recipee
     
+    def setServings(self, servings):
+        self.servings = servings
+
+
     @staticmethod
     def transformJsonToRecipee(jsonRecipee):
         recip = Recipee(jsonRecipee['recipee_id'],jsonRecipee['name'],jsonRecipee['description'],jsonRecipee['meal_type'] ,jsonRecipee['calories'] ,

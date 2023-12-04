@@ -128,7 +128,7 @@ class MealPrep:
                                                     lunch[3] * lunch_servings * lunch_weight + 
                                                     dinner[3] * dinner_servings * dinner_weight)
                                         
-                                        # Calculate LSM score
+                                        # Calculate LSM scor
                                         score = (4*(protein_goal - protein_meals)**2 + 
                                                 (carbs_goal - carbs_meals)**2 + 
                                                 (fat_goal - fat_meals)**2)
