@@ -82,6 +82,7 @@ class LifeStyle:
      
         try:
             lifeStylehists = LifeStyle.fetchPatientLifeStyleList(p_ID);
+            lifeStylehists.reverse();
             jsonHist = [];
             for lifeStylehist in lifeStylehists:
                 histObject = LifeStyle(lifeStylehist[0],lifeStylehist[1],lifeStylehist[2],lifeStylehist[3],lifeStylehist[4],lifeStylehist[5],lifeStylehist[6],lifeStylehist[7],lifeStylehist[8],lifeStylehist[9],lifeStylehist[10],lifeStylehist[11],lifeStylehists[0][12])

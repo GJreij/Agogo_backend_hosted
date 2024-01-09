@@ -78,6 +78,7 @@ class HealthHist:
             return GlobalFunctions.return_error_msg(err_msg)
         try:
             healthhists = HealthHist.fetchPatientHealthHistList(p_ID);
+            healthhists.reverse();
             jsonHist = [];
             for healthhist in healthhists:
                 histObject = HealthHist(healthhist[0],healthhist[1],healthhist[2],healthhist[3],healthhist[4],healthhist[5],healthhist[6],healthhist[7],healthhist[8],healthhist[9],healthhist[10],healthhist[11],healthhist[12],healthhist[13])

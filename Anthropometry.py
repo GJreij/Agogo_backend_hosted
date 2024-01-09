@@ -76,7 +76,8 @@ class Anthropometry:
             return GlobalFunctions.return_error_msg(err_msg)
             
         try:
-            anths = Anthropometry.fetchPatientAnthropometryList(p_ID);        
+            anths = Anthropometry.fetchPatientAnthropometryList(p_ID);   
+            anths.reverse();     
             jsonAnthHist = [];
             for anth in anths:
                 anthObject = Anthropometry(anth[0],anth[1],anth[2],anth[3],anth[4],anth[5],anth[6],anth[7],anth[8],anth[9],anth[10],anth[11],anth[12])

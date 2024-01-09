@@ -68,7 +68,7 @@ class BodyComp:
             
         try:
             boCos = BodyComp.fetchPatientBodyCompList(p_ID);    
-            boCos = boCos.reverse();   
+            boCos.reverse();   
             jsonHist = [];
             for boCo in boCos:
                 histObject = BodyComp(boCo[0],boCo[1],boCo[2],boCo[3],boCo[4],boCo[5],boCo[6])
