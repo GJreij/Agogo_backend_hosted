@@ -175,7 +175,7 @@ class Dietitian:
     def addDietitian(dietitianData):
         dietitianData = json.loads(dietitianData)
         try:
-            if dietitian_id['email'] == '':
+            if dietitianData['email'] == '':
                 return GlobalFunctions.return_error_msg("Dietitian Email is a mandatory field")
             
             cur = Db_connection.getConnection().cursor()
